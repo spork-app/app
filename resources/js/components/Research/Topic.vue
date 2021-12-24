@@ -1,0 +1,259 @@
+<style scoped>
+h1 {
+    @apply text-2xl;
+}
+
+</style>
+
+<template>
+<div class="h-full" v-if="topic">
+    <div class="flex w-full h-screen overflow-auto">
+        <div class="w-1/2 flex flex-col items-center">
+            <div class="w-full text-center font-medium text-gray-700 px-4 py-2 border-r border-gray-200">{{ topic.name }}</div>
+            <div class="w-full">
+                <textarea
+                    autofocus
+                    @mouseenter="(e) => active = e.target"
+                    @mouseleave="() => active = null"
+                    @scroll="scrollSync"
+                    @keydown.tab="textareaTabMicro"
+                    @keydown.ctrl="ctrlSSaving"
+                    v-model="topic.settings.body"
+                    class="w-full border-b border-gray-200 bg-white sync-scrolling border-l-0"
+                    ref="textarea"
+                    style="height: calc((100vh - 40px)/2);">
+                </textarea>
+            </div>
+            <div @mouseenter="(e) => active = e.target" @mouseleave="() => active = null" @scroll="scrollSync" class="w-full border-r border-gray-200 overflow-auto w-full flex mx-auto text-left sync-scrolling -mt-2" ref="markdown">
+                <Markdown :source="markdownWithLinks" class="w-full mx-auto prose prose-sm"  style="height: calc((100vh - 40px)/2); "/>
+            </div>
+        </div>
+        <div class="w-1/2 flex flex-col overflow-y-scroll bg-gray-50 gap-2" ref="research">
+            <input @keyup="searchDebounce(() => $store.dispatch('search', { search }), 250)" v-model="search" :placeholder="'Search: ' + topic.name" type="text" class="w-full px-4 py-2 bg-white border-b border-t-0 border-l-0 border-r-0 border-gray-200">
+
+            <div v-if="!$store.getters.researchLoading" v-for="item in $store.getters.research.data" class="relative rounded-lg border border-gray-300 bg-white px-4 py-2 mx-2 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full mt-2" :src="item.image" alt="">
+                </div>
+                <div class="flex-1 min-w-0 relative" v-if="item.image">
+                    <button
+                        @click.prevent="() => {
+                            if (topic.settings.links.includes(item.link)) {
+                                topic.settings.links = topic.settings.links.filter(link => item.link !== link)
+                                return;
+                            }
+                            topic.settings.links.push(item.link)
+                        }"
+                        class="w-8 h-8 absolute bottom-0 right-0 z-10 border rounded-full flex items-center justify-center bg-white">
+                        <PlusIcon v-if="!topic.settings.links.includes(item.link)" class="w-3 h-3"></PlusIcon>
+                        <CheckIcon v-else class="w-3 h-3"></CheckIcon>
+                    </button>
+
+                    <a :href="item.link" class="focus:outline-none" target="_blank">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        <p class="text-sm font-medium text-gray-900" v-html="item.title"></p>
+                        <p class="text-sm text-gray-500" v-html="item.snippet"></p>
+                        <a :href="item.link" class="text-sm text-green-500" v-html="item.link"></a>
+                    </a>
+                </div>
+                <pre v-else>{{ item }}</pre>
+            </div>
+            <div v-else class="px-2 py-4 italics">
+                Loading...
+            </div>
+
+            <div v-if="!$store.getters.research.total" class="px-4 italic text-gray-600">
+                No search results
+            </div>
+
+            <div v-if="$store.getters.research?.data?.length > 0" class="flex w-full justify-between items-center mb-2 px-2">
+                <button
+                    :disabled="!$store.getters.research.prev_page_url"
+                    :class="['p-2 border border-gray-200', !$store.getters.research.prev_page_url ? 'bg-gray-100 text-gray-500 no-cursor' : 'bg-white text-gray-800 underline']"
+                    @click="$store.dispatch('search', { search, url: $store.getters.research.prev_page_url })"
+                >&laquo; Previous</button>
+                <button
+                    :disabled="!$store.getters.research.next_page_url"
+                    :class="['p-2 border border-gray-200', !$store.getters.research.next_page_url ? 'bg-gray-100 text-gray-500 no-cursor' : 'bg-white text-gray-800 underline']"
+                    @click="$store.dispatch('search', { search, url: $store.getters.research.next_page_url })"
+                >Next &raquo;</button>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+import {PlusIcon, HomeIcon, PencilIcon, ShoppingCartIcon, CheckIcon} from "@heroicons/vue/outline";
+import 'highlight.js/styles/monokai.css';
+import Markdown from 'vue3-markdown-it';
+import {ref} from "vue";
+
+export default {
+    name: "Research",
+    components: {
+        Markdown,
+        PlusIcon,
+        CheckIcon
+    },
+    data() {
+        return {
+            topic: null,
+            startOffset: 0,
+        }
+    },
+    methods: {
+        scrollSync() {
+            [this.textarea, this.markdown].forEach(element => {
+                if (!this.active) {
+                    return;
+                }
+                if (element.isSameNode(this.active)) {
+                    return;
+                }
+                element.scrollTop = this.active.scrollTop;
+                element.scrollLeft = this.active.scrollLeft;
+            });
+        },
+        ctrlSSaving(keyboardEvent) {
+            if (keyboardEvent.key !== 's') {
+                return;
+            }
+            keyboardEvent.preventDefault();
+
+            this.$store.dispatch('updateResearch', this.topic)
+        },
+        /** @var KeyboardEvent keyboardEvent */
+        textareaTabMicro(keyboardEvent) {
+            if (!keyboardEvent.shiftKey && keyboardEvent.keyCode === 9) {
+                console.log(keyboardEvent, Object.keys(keyboardEvent))
+                return;
+            }
+            keyboardEvent.preventDefault();
+
+            const { start, end } = this.getCursorPos();
+            this.textarea.value = this.textarea.value.substring(0, start) + "    " + this.textarea.value.substring(end);
+            this.textarea.selectionStart = this.textarea.selectionEnd = start + 4;
+        },
+        getCursorPos() {
+            if ("selectionStart" in this.textarea && document.activeElement == this.textarea) {
+                return {
+                    start: this.textarea.selectionStart,
+                    end: this.textarea.selectionEnd
+                };
+            }
+            else if (this.textarea.createTextRange) {
+                var sel = document.selection.createRange();
+                if (sel.parentElement() === this.textarea) {
+                    var rng = this.textarea.createTextRange();
+                    rng.moveToBookmark(sel.getBookmark());
+                    for (var len = 0;
+                         rng.compareEndPoints("EndToStart", rng) > 0;
+                         rng.moveEnd("character", -1)) {
+                        len++;
+                    }
+                    rng.setEndPoint("StartToStart", this.textarea.createTextRange());
+                    for (var pos = { start: 0, end: len };
+                         rng.compareEndPoints("EndToStart", rng) > 0;
+                         rng.moveEnd("character", -1)) {
+                        pos.start++;
+                        pos.end++;
+                    }
+                    return pos;
+                }
+            }
+            return -1;
+        },
+        setTopic(newVal) {
+            if (!newVal) {
+                this.topic = null
+                return null;
+            }
+
+            const topic = this.$store.getters.topics.filter(topic => topic.id == newVal)[0];
+
+            if (!topic.settings) {
+                topic.settings = {
+                    body: '',
+                    links: []
+                }
+            }
+
+            this.topic = topic;
+            this.$store.commit('setResearch', []);
+        }
+    },
+    computed: {
+        routes() {
+            return [
+                {
+                    name: 'Home',
+                    href: '/research',
+                    icon: HomeIcon,
+                    current: false,
+                },
+                {
+                    name: 'Topics',
+                    href: '#',
+                    icon: PencilIcon,
+                    current: false,
+                    children: this.$store.getters.topics.map(list => ({
+                        name: list.name,
+                        href: '/research/' + list.id,
+                        current: false,
+                    }))
+                },
+            ]
+        },
+        markdownWithLinks() {
+            if (!this.topic) {
+                return '';
+            }
+
+            if (this.topic.settings.links.length === 0) {
+                return this.topic.settings.body;
+            }
+
+            if (!this.topic.settings.body) {
+                return ''
+            }
+
+            return this.topic.settings.body + "\n\n------------\n\n## Resources\n" + this.topic.settings.links.map(link => ' - [' + link + '](' + link + ')' + "\n").join('')
+        }
+    },
+    watch: {
+        '$route.params.id'(newVal, old) {
+            this.setTopic(newVal);
+            // this.$store
+        },
+    },
+    async mounted() {
+        await this.$store.dispatch('getResearches');
+
+        this.setTopic(this.$route.params.id)
+    },
+    setup() {
+        function createDebounce() {
+            let timeout = null;
+            return function (fnc, delayMs) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    fnc();
+                }, delayMs || 100);
+            };
+        }
+
+        const searchDebounce = createDebounce();
+
+        return {
+            active: ref(null),
+            markdown: ref(null),
+            textarea: ref(null),
+            research: ref(null),
+            search: ref(''),
+            topic: ref(null),
+            searchDebounce,
+        }
+    }
+}
+</script>

@@ -1,0 +1,113 @@
+# For more information: https://laravel.com/docs/docker_admin
+version: '3'
+services:
+  laravel.test:
+    build:
+      context: ./docker/8.0
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    image: sail-8.0/app
+    ports:
+      - '${APP_PORT:-80}:80'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_docker_admin: 1
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - docker_admin
+    depends_on:
+      - redis
+      - mysql
+  app.horizon:
+    build:
+      context: ./docker/horizon
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_docker_admin: 1
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - docker_admin
+    depends_on:
+      - redis
+      - mysql
+  app.cron:
+    build:
+      context: ./docker/crontab
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_docker_admin: 1
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - docker_admin
+    depends_on:
+      - redis
+      - mysql
+  mysql:
+    image: 'mysql:8.0'
+    ports:
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - 'docker_admin_mysql:/var/lib/mysql'
+    networks:
+      - docker_admin
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'docker_admin_redis:/data'
+    networks:
+      - docker_admin
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - '8086:8086'
+    volumes:
+      - docker_admin_influx:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=db0
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
+  meilisearch:
+    image: 'getmeili/meilisearch:latest'
+    ports:
+      - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+    volumes:
+      - 'docker_admin_meilisearch:/data.ms'
+    networks:
+      - docker_admin
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+      retries: 3
+      timeout: 5s
+
+networks:
+  docker_admin:
+    driver: bridge
+volumes:
+  docker_admin_redis:
+    driver: local
+  docker_admin_mysql:
+    driver: local
+  docker_admin_influx:
+    driver: local
+  docker_admin_meilisearch:
+    driver: local

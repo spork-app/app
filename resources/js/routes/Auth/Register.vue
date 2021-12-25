@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ValidationErrors from '../../components/ValidationErrors'
+import ValidationErrors from '@components/ValidationErrors'
 
 export default {
     components: {

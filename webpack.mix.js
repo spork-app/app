@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,18 +12,21 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss')
     ])
     .webpackConfig({
         resolve: {
-            fallback: {
-                'os': require.resolve('os-browserify'),
-                "stream": require.resolve("stream-browserify"),
-                "path": require.resolve("path-browserify"),
+            alias: {
+                '@components': path.resolve(__dirname, 'resources/js/components'),
+                '@routes': path.resolve(__dirname, 'resources/js/routes'),
+                '@store': path.resolve(__dirname, 'resources/js/store'),
+                '@icons': path.resolve(__dirname, 'resources/js/icons'),
+                '@': path.resolve(__dirname, 'resources/js'),
             }
         }
     })
     .vue()
+    .js('resources/js/app.js', 'public/js')
     .disableNotifications()

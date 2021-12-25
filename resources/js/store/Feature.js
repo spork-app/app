@@ -14,8 +14,16 @@ export default {
             'calendar',
         ],
         loading: true,
+        errors: {},
+        open: false,
+    },
+    mutations: {
+        setOpenResearch(state, value) {
+            state.open = value;
+        }
     },
     getters: {
+        openResearch: state => state.open,
         features: state => state.features.reduce((allFeatures, feature) => ({
             ...allFeatures,
             [feature.feature]: [ ...new Set([ ...(allFeatures[feature.feature] ? allFeatures[feature.feature]: [] ), feature])],
@@ -30,7 +38,8 @@ export default {
                 ...accounts,
                 ...ac.accounts,
             ])
-        ]), [])
+        ]), []),
+        featureErrors: state => state.errors,
     },
     actions: {
         async getFeatureLists({ commit, state }, { filter, feature, ...options }) {
@@ -48,10 +57,16 @@ export default {
             setTimeout(()=> state.loading = false, 500);
         },
         async createFeature({ commit, state }, feature) {
-            state.loading = true;
-            const { data } = await axios.post('/api/feature-list', feature);
-            state.features.push(data);
-            setTimeout(()=> state.loading = false, 500);
+            try { 
+                state.loading = true;
+                const { data } = await axios.post('/api/feature-list', feature);
+                state.features.push(data);
+                commit('setOpenResearch', false);
+            } catch (error) {
+                state.errors = error.response.data.errors;
+            } finally {
+                state.loading = false;
+            }
         }
     },
 };

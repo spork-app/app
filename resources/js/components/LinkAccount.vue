@@ -10,8 +10,8 @@
                 <button @click.prevent="open = true">
                     Create a manual account
                 </button>
-                <button @click="() => linkAccount()" class="text-white p-2 rounded shadow" :class="{ 'bg-blue-500': !$store.getters.darkMode, 'bg-blue-700': $store.getters.darkMode }">
-                    Link new account through Plaid
+                <button @click="() => linkAccount()" class="text-white p-2 rounded shadow ml-4" :class="{ 'bg-blue-500': !$store.getters.darkMode, 'bg-blue-700': $store.getters.darkMode }">
+                    Link through Plaid
                 </button>
             </div>
         </div>
@@ -83,7 +83,7 @@
                         >
                             Create New Account
                         </button>
-                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                        <button @click="open = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
                             Cancel
                         </button>
                     </div>

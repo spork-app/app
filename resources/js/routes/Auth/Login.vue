@@ -37,7 +37,7 @@
 </template> 
 
 <script>
-import ValidationErrors from '../../components/ValidationErrors.vue';
+import ValidationErrors from '@components/ValidationErrors.vue';
 
 export default {
     components: {

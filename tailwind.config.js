@@ -23,6 +23,29 @@ module.exports = {
         animation: {
           rotate: 'rotate .75s ease-in-out infinite'
         },
+        typography: (theme) => ({
+          sm: {
+            css: {
+              color: theme('colors.gray.800'),
+              hr: {
+                marginTop: '1rem',
+                marginBottom: '1rem',
+              },
+              h1: {
+                lineHeight: 1
+              },
+              h2: {
+                marginTop: '1rem',
+                marginBottom: '0.5rem',
+              },
+              p: {
+                marginTop: '1rem',
+                marginBottom: '1rem',
+              }
+            },
+          },
+        }),
+  
     },
   },
   variants: {

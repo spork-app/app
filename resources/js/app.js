@@ -5,14 +5,14 @@ import { buildUrl } from '@kbco/query-builder';
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
 import { createRouter, createWebHistory } from 'vue-router'
-import CrudView from "./components/CrudView";
+import CrudView from "@components/CrudView";
 
 import dayjs from 'dayjs';
 
 import CalendarEvent from './CalendarEvent'
 
 import './bootstrap'
-import StoreItem from "./components/Shopping/components/StoreItem";
+import StoreItem from "./routes/Shopping/components/StoreItem";
 
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/localizedFormat'));
@@ -85,39 +85,40 @@ const authenticatedRoute = (path, pathToComponent, extraOptions = {}) => {
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        authenticatedRoute('/', './components/Base', {
+        authenticatedRoute('/', './routes/Base', {
             children: [
-                authenticatedRoute('/planning', './components/Planning/KanbanBoard'),
-                authenticatedRoute('/maintenance/properties', './components/Maintenance/Properties'),
-                authenticatedRoute('/maintenance/garage', './components/Maintenance/Garage'),
-                authenticatedRoute('/calendar', './components/Calendar/Calendar'),
-                authenticatedRoute('/shopping', './components/Shopping/Shopping', {
+                authenticatedRoute('/planning', './routes/Planning/KanbanBoard'),
+                authenticatedRoute('/maintenance/properties', './routes/Maintenance/Properties'),
+                authenticatedRoute('/maintenance/garage', './routes/Maintenance/Garage'),
+                authenticatedRoute('/calendar', './routes/Calendar/Calendar'),
+                authenticatedRoute('/shopping', './routes/Shopping/Shopping', {
                     children: [
-                        authenticatedRoute('shopping/order', './components/Shopping/PastOrders'),
-                        authenticatedRoute('shopping/cart', './components/Shopping/Cart'),
-                        authenticatedRoute('', './components/Shopping/Store'),
+                        authenticatedRoute('shopping/order', './routes/Shopping/PastOrders'),
+                        authenticatedRoute('shopping/cart', './routes/Shopping/Cart'),
+                        authenticatedRoute('', './routes/Shopping/Store'),
                     ]
                 }),
-                authenticatedRoute('/research', './components/Research/Research', {
+                
+                authenticatedRoute('/research', './routes/Research/Research', {
                     children: [
-                        authenticatedRoute(':id', './components/Research/Topic'),
-                        authenticatedRoute('', './components/Research/Dashboard'),
+                        authenticatedRoute(':id', './routes/Research/Topic'),
+                        authenticatedRoute('', './routes/Research/Dashboard'),
                     ]
                 }),
-                authenticatedRoute('/miscellaneous', './components/Miscellaneous/Miscellaneous', {
+                authenticatedRoute('/miscellaneous', './routes/Miscellaneous/Miscellaneous', {
                     children: [
-                        authenticatedRoute('', './components/Miscellaneous/Home'),
+                        authenticatedRoute('', './routes/Miscellaneous/Home'),
                     ],
                 }),
-                authenticatedRoute('/finance', './components/Finance/Finance', {
+                authenticatedRoute('/finance', './routes/Finance/Finance', {
                     children: [
-                        authenticatedRoute('dashboard', './components/Finance/Dashboard'),
-                        authenticatedRoute('settings', './components/Finance/Settings'),
+                        authenticatedRoute('dashboard', './routes/Finance/Dashboard'),
+                        authenticatedRoute('settings', './routes/Finance/Settings'),
                     ]
                 }),
-                authenticatedRoute('/food', './components/Food/Food', {
+                authenticatedRoute('/food', './routes/Food/Food', {
                     children: [
-                        authenticatedRoute('dashboard', './components/Food/Food'),
+                        authenticatedRoute('dashboard', './routes/Food/Food'),
                     ],
                 }),
 

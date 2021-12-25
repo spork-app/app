@@ -22,7 +22,7 @@
                     <div class="text-gray-800 text-lg font-medium">
                         {{ token.name }}
                     </div>
-                    <div class="flex w-full text-gray-500" v-if="token.accounts.length > 0">
+                    <div class="flex w-full text-gray-500" v-if="token?.accounts?.length > 0">
                         <div class=" text-sm">{{ token.accounts.map(a => a.name).join(', ')}}</div>
                     </div>
                     <div class="flex w-full text-gray-500 text-sm italic" v-else>No accounts linked</div>
@@ -75,6 +75,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="my-4">
+                        <div class="text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Finance Account (Link)
+                            </h3>
+                            <div class="mt-2">
+                                <select v-model="form.type" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+                                    <option v-for="account in $store.getters.features.finance" :key="account.account_id" :value="account.id">{{ account.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                         <button
                             @click="createAccount"
@@ -113,7 +125,6 @@
                 return dayjs(date);
             },
             async createAccount() {
-                this.form.feature_list_id = this.$store.getters.manualFinance.id;
                 this.$store.dispatch('createAccount', this.form);
             },
             async setupPlaid(accessToken = null) {
@@ -171,7 +182,6 @@
             }
         },
         mounted() {
-            this.$store.dispatch('fetchAccountsForFeature')
         }
     }
 </script>

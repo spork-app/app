@@ -12,8 +12,8 @@
             <div class="mt-5 md:mt-0 md:col-span-2">
                 <div v-for="(tokens, $i) in [$store.getters.manualFinance].filter(v => v)" :key="$i" class="mx-4">
                     <div class="w-full text-gray-600 uppercase">{{ tokens.name }}</div>
-                    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" v-if="tokens.accounts.length > 0">
-                        <div v-for="item in tokens.accounts" :key="item.id" class="relative pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden bg-white">
+                    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" v-if="tokens?.accounts?.length > 0">
+                        <div v-for="item in tokens?.accounts" :key="item.id" class="relative pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden bg-white">
                             <dt>
                                 <div class="absolute bg-indigo-500 rounded-md p-3">
                                     <office-building-icon class="h-6 w-6 text-white" aria-hidden="true" />
@@ -49,7 +49,21 @@
                     @input="(newMapping) => mapping = newMapping.value"
                     @save="(d) => saveMapping(d)"
                     label="Update your Accounts with a CSV"
-                />
+                >
+
+                    <div class="my-4">
+                        <div class="text-left">
+                            <label class="block text-sm font-medium text-gray-700" for="account_selector">
+                                Finance Account (Link)
+                            </label>
+                            <div class="mt-2">
+                                <select v-model="link_id" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+                                    <option v-for="account in $store.getters.features.finance" :key="account.account_id" :value="account.id">{{ account.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </HeaderMapping>
 
                 <div class="mx-4">
                     <link-account />
@@ -136,12 +150,14 @@
                     {name: 'type', key: 'type', value: ''},
                 ],
                 invert_values: false,
-                account_id: null
+                account_id: null,
+                link_id: null,
             };
         },
         methods: {
             async saveTransaction(d) {
-                const manualAccount = this.$store.getters.manualFinance;
+               console.log('saving transactions')
+               const manualAccount = this.$store.getters.manualFinance;
 
                 if (!manualAccount) {
                     console.error("NO manual feature list set up for handling manual accounts.")
@@ -167,28 +183,11 @@
 
             },
             async saveMapping(d) {
-                if (!this.$store.getters.features?.finance) {
-                    await this.$store.dispatch('createFeature', {
-                        feature: 'finance',
-                        name: 'Manual accounts',
-                        settings: {}
-                    });
-                    await this.$store.dispatch('getFeatureLists', {
-                        include: 'accounts'
-                    });
-                }
-
-                const manualAccount = this.$store.getters.manualFinance;
-
-                if (!manualAccount) {
-                    return;
-                }
-
                 var formData = new FormData();
                 var imagefile = d.file.target;
                 formData.append("image", imagefile.files[0]);
                 formData.append("mapping", JSON.stringify(d.mapping));
-                formData.append("feature_list_id", manualAccount.id)
+                formData.append("feature_list_id", this.link_id)
                 const { data } = await axios.post('/api/finance/upload-accounts', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'

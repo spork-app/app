@@ -55,6 +55,7 @@
     51 => 'Spork\\Planning\\PlanningServiceProvider',
     52 => 'Spork\\Research\\ResearchServiceProvider',
     53 => 'Spork\\Shopping\\ShoppingServiceProvider',
+    54 => 'Spork\\Seeds\\PlantServiceProvider',
   ),
   'eager' => 
   array (
@@ -98,6 +99,7 @@
     37 => 'Spork\\Planning\\PlanningServiceProvider',
     38 => 'Spork\\Research\\ResearchServiceProvider',
     39 => 'Spork\\Shopping\\ShoppingServiceProvider',
+    40 => 'Spork\\Seeds\\PlantServiceProvider',
   ),
   'deferred' => 
   array (

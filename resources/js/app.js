@@ -9,6 +9,7 @@ window.Spork = new SporkApp(app);
 
 Spork.component('crud-view', require('./components/CrudView').default);
 Spork.component('feature-required', require('./components/FeatureRequired').default);
+Spork.component('dual-menu-panel', require('./components/DualMenuPanel').default);
 
 Spork.setupStore({
     Authentication: require('./store/Authentication').default,
@@ -22,6 +23,11 @@ require('@system/maintenance/resources/app');
 require('@system/planning/resources/app');
 require('@system/research/resources/app');
 require('@system/shopping/resources/app');
+require('@system/seeds/resources/app');
+
+Spork.routesFor('authentication', [
+    Spork.authenticatedRoute('settings', './routes/Profile/UserAccount'),
+]);
 
 Spork.build(async ({ store, router }) => {
     await store.dispatch('fetchUser');

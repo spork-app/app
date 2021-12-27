@@ -180,6 +180,7 @@ return [
         Spork\Planning\PlanningServiceProvider::class,
         Spork\Research\ResearchServiceProvider::class,
         Spork\Shopping\ShoppingServiceProvider::class,
+        Spork\Seeds\PlantServiceProvider::class,
     ],
 
     /*

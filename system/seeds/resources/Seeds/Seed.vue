@@ -1,15 +1,14 @@
 <template>
     <div>
-        errr 404
+        Seed page
     </div>
 </template>
 
 <script>
+ 
 export default {
-    name: "Error404"
+    setup() {
+        
+    },
 }
 </script>
-
-<style scoped>
-
-</style>

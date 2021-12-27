@@ -66,6 +66,7 @@
                                             <img :src="'/storage/' + task.assignee.profile_photo" alt="">
                                         </div>
                                     </div>
+                                    <pre>{{task }}</pre>
                                 </div>
                                 <!-- ./Tasks -->
                             </transition-group>

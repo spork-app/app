@@ -34,6 +34,7 @@
         "spork/news": "dev-main",
         "spork/planning": "dev-main",
         "spork/research": "dev-main",
+        "spork/seeds": "dev-main",
         "spork/shopping": "dev-main",
         "spork/weather": "dev-main",
         "staudenmeir/belongs-to-through": "^2.5",
@@ -114,6 +115,10 @@
         {
             "type": "path",
             "url": "./system/research"
+        },
+        {
+            "type": "path",
+            "url": "./system/seeds"
         },
         {
             "type": "path",

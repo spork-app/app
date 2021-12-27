@@ -13,6 +13,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Route;
 use Kregel\LaravelAbstract\AbstractEloquentModel;
 use Kregel\LaravelAbstract\Exceptions\ModelNotInstanceOfAbstractEloquentModel;
+use Spork\Seeds\Models\Seed;
+use Spork\Seeds\Models\Plant;
 
 class AbstractRouteServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,8 @@ class AbstractRouteServiceProvider extends ServiceProvider
                 'feature-list' => FeatureList::class,
                 'account' => Account::class,
                 'transaction' => Transaction::class,
+                'seeds' => Seed::class,
+                'plants' => Plant::class,
             ]);
 
         Route::bind('abstract_model', abstracted()->resolveModelsUsing ?? function ($value) {

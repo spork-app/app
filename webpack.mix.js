@@ -24,9 +24,14 @@ mix
                 '@store': path.resolve(__dirname, 'resources/js/store'),
                 '@icons': path.resolve(__dirname, 'resources/js/icons'),
                 '@': path.resolve(__dirname, 'resources/js'),
+                '@system': path.resolve(__dirname, 'system'),
             }
         }
     })
     .vue()
-    .js('resources/js/app.js', 'public/js')
+    .js([
+        'resources/js/app.js',
+        // This must be the last file in the list
+        'resources/js/boot.js',
+     ], 'public/js')
     .disableNotifications()

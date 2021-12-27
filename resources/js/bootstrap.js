@@ -1,3 +1,16 @@
+import dayjs from 'dayjs'
+import CalendarEvent from './CalendarEvent'
+import { buildUrl } from '@kbco/query-builder';
+
+dayjs.extend(require('dayjs/plugin/utc'))
+dayjs.extend(require('dayjs/plugin/localizedFormat'));
+dayjs.extend(require('dayjs/plugin/relativeTime'));
+dayjs.extend(require('dayjs/plugin/isToday'));
+
+window.buildUrl = buildUrl;
+window.CalendarEvent = CalendarEvent;
+
+window.dayjs = dayjs;
 window._ = require('lodash');
 Array.prototype.unique = function() {
     return [... new Set(this)];
@@ -41,6 +54,12 @@ window.Form = class Form {
     error(key) {
         return this.errors[key][0];
     }
+};
+
+window.createArray = (items) => {
+    let l = [];
+    for (let i = 0; i < items; i ++) l.push(i + 1)
+    return l;
 };
 
 /**

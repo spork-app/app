@@ -163,23 +163,23 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Service Providers...
-         */
-
-        App\Core\Providers\FortifyServiceProvider::class,
-        /*
          * Application Service Providers...
          */
-        App\Core\Providers\AppServiceProvider::class,
-        App\Core\Providers\AuthServiceProvider::class,
-        App\Core\Providers\BroadcastServiceProvider::class,
-        App\Core\Providers\EventServiceProvider::class,
-        App\Core\Providers\RouteServiceProvider::class,
-        App\Core\Providers\AbstractRouteServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\AbstractRouteServiceProvider::class,
 
-        App\Weather\Providers\WeatherServiceProvider::class,
-        App\News\Providers\NewsServiceProvider::class,
-        App\Finance\FinanceServiceProvider::class,
+        Spork\Calendar\CalendarServiceProvider::class,
+        Spork\Weather\Providers\WeatherServiceProvider::class,
+        Spork\News\NewsServiceProvider::class,
+        Spork\Finance\FinanceServiceProvider::class,
+        Spork\Maintenance\MaintenanceServiceProvider::class,
+        Spork\Planning\PlanningServiceProvider::class,
+        Spork\Research\ResearchServiceProvider::class,
+        Spork\Shopping\ShoppingServiceProvider::class,
     ],
 
     /*

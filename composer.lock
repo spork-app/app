@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b31db6476448c1b4efe5492166b1dd05",
+    "content-hash": "bcf46e40096795d317fa106261530ae1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5085,6 +5085,286 @@
                 }
             ],
             "time": "2021-12-16T08:41:16+00:00"
+        },
+        {
+            "name": "spork/analytics",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/analytics",
+                "reference": "a9447b8bb19575c116d0ee90d84200f46fea3f2d"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Analytics\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The analytics package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/calendar",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/calendar",
+                "reference": "04f3354ff132ef5c0d9885db8fccb5a16bd419e6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Calendar\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The analytics package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/finance",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/finance",
+                "reference": "d451620965f6f8d6cc082b83c41d427d1b56ce10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Finance\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The planning package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/food",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/food",
+                "reference": "f5ac41f268db6012c867100716a2676676fc8ceb"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Food\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The food package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/maintenance",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/maintenance",
+                "reference": "9d7d5ed1f343b928f7861d236006432283944e5a"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Maintenance\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The maintenance package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/news",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/news",
+                "reference": "a43d38b455158a19128d8508bd8f4614c1a2c515"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\News\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The shopping package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/planning",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/planning",
+                "reference": "00fce03fe46bfe47f501a7aba7f22047ce4ac609"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Planning\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The planning package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/research",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/research",
+                "reference": "2c2279fc4cb7025c1e711c692cc0715af698ef91"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Research\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The planning package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/shopping",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/shopping",
+                "reference": "3906a978bbfbd036544c208d65f0f3f235f61b2d"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Shopping\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The shopping package for Spork",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "spork/weather",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./system/weather",
+                "reference": "7006b31abbbfce6c555990c9992b3ff18c538d0b"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spork\\Weather\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "5355937+austinkregel@users.noreply.github.com"
+                }
+            ],
+            "description": "The weather package for Spork",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "staudenmeir/belongs-to-through",
@@ -10345,12 +10625,23 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "spork/analytics": 20,
+        "spork/calendar": 20,
+        "spork/finance": 20,
+        "spork/food": 20,
+        "spork/maintenance": 20,
+        "spork/news": 20,
+        "spork/planning": 20,
+        "spork/research": 20,
+        "spork/shopping": 20,
+        "spork/weather": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

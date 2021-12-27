@@ -11,6 +11,13 @@
         <link href="{{ mix('css/app.css') }}" rel="stylesheet">
         <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 
+        <script>
+            window.Features = @json(App\Spork::$features);
+        </script>
+        @foreach (App\Spork::publish('css') as $asset)
+            <link href="{{ $asset }}" rel="stylesheet"> 
+        @endforeach
+
     </head>
     <body class="antialiased h-full text-gray-900">
         <div id="app" class="h-full">

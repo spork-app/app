@@ -24,8 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->post('event', \App\Analytics\Http\Controllers\EventController::class);
-Route::middleware('auth:sanctum')->get('shopping-search', \App\Shopping\Http\Controller\ItemController::class);
+Route::middleware('auth:sanctum')->get('shopping-search', \Spork\Shopping\Http\Controller\ItemController::class);
 Route::middleware('auth:sanctum')->get('research', function (Request $request, \Google\Client $client) {
     $page = $request->get('page', $request->get('start') / 10);
 
@@ -55,12 +54,12 @@ Route::middleware('auth:sanctum')->get('research', function (Request $request, \
     ]))->onEachSide(1);
 });
 
-Route::middleware('auth:sanctum')->get('weather', function (Request $request, \App\Weather\Contracts\Services\WeatherServiceContract $weatherService) {
+Route::middleware('auth:sanctum')->get('weather', function (Request $request, \Spork\Weather\Contracts\Services\WeatherServiceContract $weatherService) {
     $propertu = \App\Core\Models\Property::first();
 
     return $weatherService->query($propertu->address);
 });
-Route::middleware('auth:sanctum')->get('news', function (Request $request, \App\News\Contracts\Service\NewsServiceContract $service) {
+Route::middleware('auth:sanctum')->get('news', function (Request $request, \Spork\News\Contracts\Service\NewsServiceContract $service) {
     return $service->headlines('');
 });
 
@@ -213,19 +212,19 @@ Route::middleware('auth:sanctum')->post('/plaid/exchange-token', function(PlaidS
 
 Route::post('plaid/webhook', fn () => info(request()->all()));
 Route::middleware(['auth:sanctum'])->get('status', fn() =>
-\Spatie\QueryBuilder\QueryBuilder::for(\App\Planning\Models\Status::class)
+\Spatie\QueryBuilder\QueryBuilder::for(\Spork\Planning\Models\Status::class)
     ->allowedIncludes(['users', 'tasks', 'tasks.creator','tasks.assignee'])
     ->get()
 );
 Route::middleware(['auth:sanctum'])->get('users', fn() =>
-\Spatie\QueryBuilder\QueryBuilder::for(\App\Core\Models\User::class)
+\Spatie\QueryBuilder\QueryBuilder::for(\App\Models\User::class)
     ->allowedIncludes(['tasks.creator','tasks.assignee'])
     ->get()
 );
 
 Route::middleware(['auth:sanctum'])->post('assign-task', function (Request $request) {
-    $task = App\Planning\Models\Task::findOrFail($request->get('task_id'));
-    $user = App\Core\Models\User::findOrFail($request->get('user_id'));
+    $task = Spork\Planning\Models\Task::findOrFail($request->get('task_id'));
+    $user = App\Models\User::findOrFail($request->get('user_id'));
     $task->assignee_id = $user->id;
     $task->save();
 });
@@ -253,7 +252,7 @@ Route::middleware(['auth:sanctum'])->put('sync', function (Request $request) {
         foreach ($status['tasks'] as $i => $task) {
             $order = $i + 1;
             if ($task['status_id'] !== $status['id'] || $task['order'] !== $order) {
-                \App\Planning\Models\Task::find($task['id'])
+                \Spork\Planning\Models\Task::find($task['id'])
                     ->update(['status_id' => $status['id'], 'order' => $order]);
             }
         }

@@ -23,22 +23,12 @@ export default {
         }
     },
     getters: {
+        featuresLoading: state => state.loading,
         openResearch: state => state.open,
         features: state => state.features.reduce((allFeatures, feature) => ({
             ...allFeatures,
             [feature.feature]: [ ...new Set([ ...(allFeatures[feature.feature] ? allFeatures[feature.feature]: [] ), feature])],
         }), {}),
-        manualFinance: state => (state.features.reduce((allFeatures, feature) => ({
-            ...allFeatures,
-            [feature.feature]: [ ...new Set([ ...(allFeatures[feature.feature] ? allFeatures[feature.feature]: [] ), feature])],
-        }), {})?.finance || []).filter(account => account.name === 'Manual accounts')[0],
-
-        allAccountsFromFeatures: state => state.features.filter(f => f.feature === 'finance').reduce((accounts, ac) => ([
-            ... new Set([
-                ...accounts,
-                ...ac.accounts,
-            ])
-        ]), []),
         featureErrors: state => state.errors,
     },
     actions: {

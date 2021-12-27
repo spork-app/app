@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-full flex bg-gray-800">
+    <div class="w-full min-h-full  flex bg-gray-800">
         <div class="w-14 2xl:w-64 overflow-hidden flex flex-col justify-between">
             <div class="flex flex-col gap-2 text-gray-200">
                 <div class="p-4 flex items-center gap-4 text-2xl">
@@ -38,13 +38,13 @@
             </div>
 
             <div class="flex w-full justify-between items-center p-4 text-gray-100">
-                <div class="flex flex-wrap gap-2 items-center">
-                    <div class="w-8 h-8 rounded-full overflow-hidden">
-                        <img src="https://pbs.twimg.com/profile_images/1244859550169206784/AWGcu5Hc_400x400.jpg" alt="User photo"/>
+                <div class="flex flex-wrap gap-2 items-center" v-if="$store.getters.isAuthenticated">
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-white">
+                        <img :src="'/user-img/'+ $store.getters.isAuthenticated.id" alt="User photo"/>
                     </div>
                     <div class="flex flex-col">
-                        <div class="text-sm font-medium">Austin Kregel</div>
-                        <div class="text-xs">1411 Highland Drive</div>
+                        <div class="text-sm font-medium">{{ $store.getters.isAuthenticated.name}}</div>
+                        <div class="text-sm font-thin">{{ $store.getters.isAuthenticated.email}}</div>
                     </div>
                 </div>
                 <router-link to="/settings">
@@ -52,8 +52,8 @@
                 </router-link>
             </div>
         </div>
-        <div class="flex-1 bg-gray-50">
-            <router-view v-if="!$store.state.FeatureStore.loading"></router-view>
+        <div class="flex-1 bg-gray-50 max-h-screen overflow-y-scroll">
+            <router-view v-if="!$store.getters.featuresLoading"></router-view>
             <div v-else class="flex items-center justify-center text-xl w-full h-full">
                 <refresh-icon class="animate-rotate w-8 h-8" />
                 <div class="ml-4">Loading features!</div>
@@ -64,18 +64,7 @@
 <script>
 import { ref } from 'vue'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import {
-    CalendarIcon,
-    ViewBoardsIcon,
-    CogIcon,
-    HomeIcon,
-    TruckIcon,
-    ShoppingCartIcon,
-    BeakerIcon,
-    LibraryIcon,
-    PhoneIcon,
-    RefreshIcon,
-} from '@heroicons/vue/outline'
+import { RefreshIcon } from '@heroicons/vue/outline'
 
 import Chunk from '@icons/Chunk';
 
@@ -90,6 +79,17 @@ const mapCurrentRoute = (fullPath, item) => {
     return item;
 };
 
+const icons = {};
+ Object.values(Features).map(({ name, icon, path}) => {
+    const { [icon]: iconComponent } = require('@heroicons/vue/outline');
+
+    icons[icon] = iconComponent;
+
+    console.log({
+        [icon]: iconComponent,
+    })
+})
+
 export default {
     components: {
         Disclosure,
@@ -97,6 +97,7 @@ export default {
         DisclosurePanel,
         Chunk,
         RefreshIcon,
+        ...icons,
     },
     setup() {
         return {
@@ -105,30 +106,11 @@ export default {
     },
     computed: {
         navigation: function () {
-            return [
-                {name: 'Home', icon: HomeIcon, href: '/home', },
-                {
-                    name: 'Finance', icon: LibraryIcon, children: [
-                        {name: 'Dashboard', icon: LibraryIcon, href: '/finance/dashboard'},
-
-                    ]
-                },
-                {name: 'Planning', icon: ViewBoardsIcon, href: '/planning'},
-                {name: 'Calendar', icon: CalendarIcon, href: '/calendar'},
-                {
-                    name: 'Maintenance', href: '/maintenance', icon: CogIcon, children: [
-                        {name: 'Properties', icon: HomeIcon, href: '/maintenance/properties'},
-                        {name: 'Garage', icon: TruckIcon, href: '/maintenance/garage'}
-                    ]
-                },
-                {name: 'Shopping', icon: ShoppingCartIcon, href: '/shopping'},
-                {name: 'Research', icon: BeakerIcon, href: '/research'},
-                {
-                    name: 'Miscellaneous', href: '/miscellaneous', icon: CogIcon
-                },
-                {name: 'Food', icon: Chunk, href: '/food'},
-
-            ].map((item) => mapCurrentRoute(this.$route.fullPath, item))
+            return Object.values(Features).map(route => ({
+                name: route.name,
+                icon: route.icon,
+                href: route.path,
+            })).map((item) => mapCurrentRoute(this.$route.fullPath, item))
         }
     }
 }

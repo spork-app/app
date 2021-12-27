@@ -1,0 +1,13 @@
+Spork.setupStore({
+    Finance: require("./store").default,
+})
+
+
+Spork.routesFor('finance', [
+    Spork.authenticatedRoute('/finance', require('./Finance/Finance').default, {
+        children: [
+            Spork.authenticatedRoute('dashboard', require('./Finance/Dashboard').default),
+            Spork.authenticatedRoute('settings', require('./Finance/Settings').default),
+        ]
+    }),
+]);

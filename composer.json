@@ -26,6 +26,16 @@
         "rlanvin/php-rrule": "^2.2",
         "spatie/laravel-query-builder": "^3.4",
         "spatie/laravel-tags": "^4.0",
+        "spork/analytics": "dev-main",
+        "spork/calendar": "dev-main",
+        "spork/finance": "dev-main",
+        "spork/food": "dev-main",
+        "spork/maintenance": "dev-main",
+        "spork/news": "dev-main",
+        "spork/planning": "dev-main",
+        "spork/research": "dev-main",
+        "spork/shopping": "dev-main",
+        "spork/weather": "dev-main",
         "staudenmeir/belongs-to-through": "^2.5",
         "tomorrow-ideas/plaid-sdk-php": "^1.0",
         "tray-labs/laravel-influxdb": "^1.0"
@@ -72,6 +82,48 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./system/analytics"
+        },
+        {
+            "type": "path",
+            "url": "./system/calendar"
+        },
+        {
+            "type": "path",
+            "url": "./system/finance"
+        },
+        {
+            "type": "path",
+            "url": "./system/food"
+        },
+        {
+            "type": "path",
+            "url": "./system/maintenance"
+        },
+        {
+            "type": "path",
+            "url": "./system/news"
+        },
+        {
+            "type": "path",
+            "url": "./system/planning"
+        },
+        {
+            "type": "path",
+            "url": "./system/research"
+        },
+        {
+            "type": "path",
+            "url": "./system/shopping"
+        },
+        {
+            "type": "path",
+            "url": "./system/weather"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

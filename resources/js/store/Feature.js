@@ -12,6 +12,7 @@ export default {
             'weather',
             'property',
             'calendar',
+            'greenhouse',
         ],
         loading: true,
         errors: {},
@@ -30,6 +31,12 @@ export default {
             [feature.feature]: [ ...new Set([ ...(allFeatures[feature.feature] ? allFeatures[feature.feature]: [] ), feature])],
         }), {}),
         featureErrors: state => state.errors,
+        actionsForFeature: state => Object.values(Actions).flat(1).reduce((allActions, action) => ({
+            ...action.tags.reduce((tags, tag) => ({
+                ...tags,
+                [tag]: [ ...new Set([ ...(tags[tag] ? tags[tag]: [] ), action])],
+            }), allActions)
+        }), {}),
     },
     actions: {
         async getFeatureLists({ commit, state }, { filter, feature, ...options }) {
@@ -57,6 +64,14 @@ export default {
             } finally {
                 state.loading = false;
             }
+        },
+        
+        async executeAction({ state }, { url, data }) {
+            // actionToRun,
+            // selectedItems,
+            await axios.post(url, data);
+
         }
     },
+    
 };

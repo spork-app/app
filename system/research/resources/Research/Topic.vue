@@ -9,8 +9,13 @@ h1 {
 <div class="h-full" v-if="topic">
     <div class="flex w-full h-screen overflow-auto">
         <div class="w-1/2 flex flex-col items-center">
-            <div class="w-full text-center font-medium text-gray-700 px-4 py-2 border-r border-gray-200">{{ topic.name }}</div>
-            <div class="w-full relative">
+            <div class="w-full flex flex-wrap justify-between font-medium text-gray-700 px-4 py-2 border-r border-gray-200">
+                <div class="text-center">{{ topic.name }}</div>
+                <button @click.prevent="stack = !stack" class="underline">
+                    {{ stack ? 'Full Preview': 'Edit'}}
+                </button>
+            </div>
+            <div class="w-full relative" v-show="stack">
                 <textarea
                     autofocus
                     @mouseenter="(e) => active = e.target"
@@ -22,19 +27,20 @@ h1 {
                     v-model="topic.settings.body"
                     class="w-full border-b border-gray-200 bg-white sync-scrolling border-l-0"
                     ref="textarea"
-                    style="height: calc((100vh - 40px)/2);">
+                    style="height: calc((100vh - 40px)/2);"
+                >
                 </textarea>
 
                 <div class="absolute bottom-0 left-0 pb-2 pl-2" :class="[showBold? 'font-bold': '']">Resources [{{ topic?.settings?.links?.length }}]</div>
             </div>
             <div @mouseenter="(e) => active = e.target" @mouseleave="() => active = null" @scroll="scrollSync" class="w-full border-r border-gray-200 overflow-auto w-full flex mx-auto text-left sync-scrolling -mt-2" ref="markdown">
-                <Markdown html="true" :source="markdownWithLinks" class="w-full py-8 mx-auto prose prose-sm"  style="height: calc((100vh - 40px)/2); "/>
+                <Markdown :html="true" :source="markdownWithLinks" class="w-full py-8 mx-auto prose prose-sm"  style="height: calc((100vh - 40px)/2); "/>
             </div>
         </div>
         <div class="w-1/2 flex flex-col overflow-y-scroll bg-gray-50 gap-2" ref="research">
             <input @keyup="searchDebounce(() => $store.dispatch('search', { search }), 250)" v-model="search" :placeholder="'Search: ' + topic.name" type="text" class="w-full px-4 py-2 bg-white border-b border-t-0 border-l-0 border-r-0 border-gray-200">
 
-            <div v-if="!$store.getters.researchLoading" v-for="item in $store.getters.research.data" class="relative rounded-lg border border-gray-300 bg-white px-4 py-2 mx-2 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+            <div v-if="!$store.getters.researchLoading" v-for="(item, $i) in $store.getters.research.data" :key="'research'+$i" class="relative rounded-lg border border-gray-300 bg-white px-4 py-2 mx-2 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                 <div class="flex-shrink-0">
                     <img class="h-10 w-10 rounded-full mt-2" :src="item.image" alt="">
                 </div>
@@ -106,6 +112,7 @@ export default {
             startOffset: 0,
             changes: [],
             showBold: false,
+            stack: true,
         }
     },
     methods: {
@@ -123,7 +130,6 @@ export default {
                         links: [ ... new Set([...this.topic.settings.links, clipboard])]
                     }
                 }
-                console.log(this.topic.settings.links)
 
                 clipboard = '[' + url.hostname+url.pathname + '](' + clipboard + ')';
             }

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!loading" class="flex flex-wrap w-full gap-4 container mx-auto">
+    <div v-if="!$store.getters.tasksLoading" class="flex flex-wrap w-full gap-4 container mx-auto">
         <!-- Thank you https://github.com/messerli90/laravel-vue-kanban-tutorial :D -->
         <div class="w-full rounded-lg">
             <div class="text-4xl font-medium text-blue-900 my-4">
@@ -8,7 +8,7 @@
         </div>
 
         <div
-            v-for="status in statuses"
+            v-for="status in $store.getters.statuses"
             :key="status.slug"
             class="flex-1 "
         >
@@ -30,7 +30,7 @@
                         class="flex-1 gap-2 flex flex-col list-group"
                         v-model="status.tasks"
                         v-bind="taskDragOptions"
-                        @end="handleTaskMoved"
+                        @end="newTask => moveTask(newTask)"
                         item-key="title"
                         style="min-height:1rem;"
                     >
@@ -61,12 +61,10 @@
                                         <div class="font-bold">
                                             #{{ task.id }}
                                         </div>
-
                                         <div class="w-6 h-6 overflow-hidden rounded-full flex items-center justify-center" v-if="task.assignee">
-                                            <img :src="'/storage/' + task.assignee.profile_photo" alt="">
+                                            <img :src="task.assignee.profile_photo">
                                         </div>
                                     </div>
-                                    <pre>{{task }}</pre>
                                 </div>
                                 <!-- ./Tasks -->
                             </transition-group>
@@ -78,12 +76,16 @@
         </div>
         <div id="div-context-menu" class="absolute z-10 bg-white rounded shadow-lg p-2" style="top: -9999px; left: -9999px;">
             <div class="w-full flex flex-col">
+                <!-- Assgin a user to the task -->
                 <div class="uppercase text-gray-600 text-xs">assign user</div>
-                <div class="flex flex-col text-sm pt-2">
-                    <button v-for="user in users" :key="'user.' + user.id" @click.prevent="() => assignUser(user)">{{ user.name }}</button>
+                <div class="flex flex-col text-sm pt-2" v-if="$store.getters.assignableUsers">
+                    <button v-for="user in $store.getters.assignableUsers" :key="'user.' + user.id" @click.prevent="() => assignUser(user)">{{ user.name }}</button>
 
-                    <div v-if="users.length === 0">No Users</div>
+                    <div v-if="$store.getters.assignableUsers.length === 0">No Users</div>
                 </div>
+
+                <!-- Delete task -->
+                <button class="bg-red-500 text-white rounded mt-2" @click.prevent="deleteTask">Delete</button>
             </div>
         </div>
         <button v-if="display_background" class="fixed w-full h-full bg-gray-800 opacity-25 top-0 left-0 right-0 bottom-0" @click="display_background = false"></button>
@@ -106,14 +108,11 @@ export default {
     },
     setup() {
         return {
-            statuses: ref([]),
-            users: ref([]),
             newTaskForStatus: ref(0),
             loading: ref(true),
             targetTask: ref(null),
             popoverX: ref(0),
             popoverY: ref(0),
-            assigningUser: ref(false),
             display_background: ref(false),
         };
     },
@@ -126,9 +125,11 @@ export default {
             };
         }
     },
-    mounted() {
-        this.getTasks();
-        this.getUsers();
+    async mounted() {
+
+
+        await this.$store.dispatch('fetchAssignableUsers');
+        await this.$store.dispatch('fetchTasks')
     },
     watch: {
         popoverY() {
@@ -145,15 +146,6 @@ export default {
         }
     },
     methods: {
-        assignUser(user) {
-            this.assigningUser = true;
-            axios.post('/api/assign-task', {
-                task_id: this.targetTask.id,
-                user_id: user.id,
-            }).then((res) => {
-                this.assigningUser = false;
-            })
-        },
         // When you right click
         openContextMenu(e, task) {
             e.preventDefault();
@@ -162,43 +154,29 @@ export default {
             this.targetTask = task;
             this.display_background = true;
         },
-
-
-        getTasks() {
-            this.loading = true;
-            axios.get('/api/status?include=tasks.creator,tasks.assignee')
-                .then((res) => {
-                    this.statuses = res.data.sort((a, b) => a.order > b.order ? 1 : -1);
-                    this.loading = false;
-                })
-        },
-        getUsers() {
-            axios.get('/api/users')
-            .then((res) => {
-                this.users = res.data;
-            })
-        },
         openAddTaskForm(statusId) {
             this.newTaskForStatus = statusId;
         },
         closeAddTaskForm() {
             this.newTaskForStatus = 0;
         },
-        handleTaskAdded(newTask) {
-            // Find the index of the status where we should add the task
-            const statusIndex = this.statuses.findIndex(
-                status => status.id === newTask.status_id
-            );
-            // Add newly created task to our column
-            this.statuses[statusIndex].tasks.push(newTask);
-            // Reset and close the AddTaskForm
+        async moveTask () {
+            await this.$store.dispatch('moveTask');
             this.closeAddTaskForm();
-            this.getTasks();
         },
-        handleTaskMoved(evt) {
-            axios.put("/api/sync", { columns: this.statuses }).catch(err => {
-                console.log(err.response);
-            });
+        async handleTaskAdded(newTask) {
+            await this.$store.dispatch('updateTaskOrder', newTask)
+            this.closeAddTaskForm();
+        },
+        async assignUser(user) {
+            await this.$store.dispatch('assignUserToTask', {id: this.targetTask.id, user})
+            this.display_background = false;
+            this.closeAddTaskForm();
+        },
+        async deleteTask() {
+            await this.$store.dispatch('deleteTask', this.targetTask);
+            this.display_background = false;
+            this.closeAddTaskForm();
         }
     }
 };

@@ -170,7 +170,6 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\AbstractRouteServiceProvider::class,
 
         Spork\Calendar\CalendarServiceProvider::class,
         Spork\Weather\Providers\WeatherServiceProvider::class,
@@ -180,7 +179,11 @@ return [
         Spork\Planning\PlanningServiceProvider::class,
         Spork\Research\ResearchServiceProvider::class,
         Spork\Shopping\ShoppingServiceProvider::class,
-        Spork\Seeds\PlantServiceProvider::class,
+        Spork\Greenhouse\PlantServiceProvider::class,
+   
+        // The abstract route services have to be registered last, otherwise there will be a fatal error
+        // because it tries to use the first parameter of `api/{route}` as a model, and fail to load.
+        App\Providers\AbstractRouteServiceProvider::class,
     ],
 
     /*

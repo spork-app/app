@@ -12,7 +12,18 @@
         <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 
         <script>
-            window.Features = @json(App\Spork::$features);
+            @php 
+            $features = array_map(fn($feature ) => [ 
+                'name' => $feature['name'], 
+                'icon' => $feature['icon'],
+                'path' => $feature['path'],
+                'slug' => Str::slug($feature['name']),
+             ], App\Spork::$features);
+
+            $actions = array_map(fn($action ) => $action, App\Spork::$actions);
+            @endphp
+            window.Features = @json($features);
+            window.Actions = @json($actions);
         </script>
         @foreach (App\Spork::publish('css') as $asset)
             <link href="{{ $asset }}" rel="stylesheet"> 

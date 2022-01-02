@@ -4,8 +4,11 @@
             :form="form"
             title="Garage"
             singular="Vehicle"
-            api-url="/api/vehicles"
             @save="save"
+            @destroy="onDelete"
+            @index="() => $store.dispatch('fetchVehicles')"
+            @execute="onExecute"
+            :data="$store.getters.vehicles"
         >
             <template v-slot:data="{ data }">
                 <div class="flex flex-col">
@@ -15,46 +18,46 @@
                         {{ data.model }}
                     </div>
                     <div class="text-xs">
-                        {{ data.year }}
+                        {{ data.vin }}
                     </div>
                 </div>
             </template>
-                <template v-slot:modal-title>Add to your garage</template>
-                <template v-slot:form>
-                    <div class="flex flex-col">
-                        <div class="mt-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
-                                Name of your Vehicle
-                            </label>
-                            <input v-model="form.name" :class="{'border-red-500': form.hasErrors('name') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Buggy"/>
-                            <div v-if="form.hasErrors('name')" class="w-full text-red-500 text-sm italic">
-                                {{ form.error('name')}}
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
-                                VIN
-                            </label>
-                            <input v-model="form.vin" :class="{'border-red-500': form.hasErrors('vin') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="property" type="text" placeholder="1FAFP52...">
-                            <div v-if="form.hasErrors('vin')" class="w-full text-red-500 text-sm italic">
-                                {{ form.error('vin')}}
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
-                                Vehicle year:
-                            </label>
-                            <select v-model="form.model_year" :class="{'border-red-500': form.hasErrors('model_year') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="year" type="text" placeholder="2019">
-                                <option v-for="year in years" :key="'year'+year" :value="year">{{ year }}</option>
-                            </select>
-                            <div v-if="form.hasErrors('model_year')" class="w-full text-red-500 text-sm italic">
-                                {{ form.error('model_year')}}
-                            </div>
+            <template v-slot:modal-title>Add to your garage</template>
+            <template v-slot:form>
+                <div class="flex flex-col">
+                    <div class="mt-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
+                            Name of your Vehicle
+                        </label>
+                        <input v-model="form.name" :class="{'border-red-500': form.hasErrors('name') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Buggy"/>
+                        <div v-if="form.hasErrors('name')" class="w-full text-red-500 text-sm italic">
+                            {{ form.error('name')}}
                         </div>
                     </div>
-                </template>
+                    <div class="mt-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
+                            VIN
+                        </label>
+                        <input v-model="form.vin" :class="{'border-red-500': form.hasErrors('vin') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="property" type="text" placeholder="1FAFP52...">
+                        <div v-if="form.hasErrors('vin')" class="w-full text-red-500 text-sm italic">
+                            {{ form.error('vin')}}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="property">
+                            Vehicle year:
+                        </label>
+                        <select v-model="form.model_year" :class="{'border-red-500': form.hasErrors('model_year') }" class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="year" type="text" placeholder="2019">
+                            <option v-for="year in years" :key="'year'+year" :value="year">{{ year }}</option>
+                        </select>
+                        <div v-if="form.hasErrors('model_year')" class="w-full text-red-500 text-sm italic">
+                            {{ form.error('model_year')}}
+                        </div>
+                    </div>
+                </div>
+            </template>
 
-                <template #no-data>No vehicles in your garage</template>
+            <template #no-data>No vehicles in your garage</template>
         </crud-view>
 
     </div>
@@ -97,29 +100,30 @@ export default {
                 '<span class="text-gray-800">' + dayjs(vehicle.last_occurrence || vehicle.remind_at).format('h:mma') + '</span>'
         },
         async save(form) {
-            const { data: {
-                Make: make,
-                Model: model,
-                Series: trim,
-                ModelYear: model_year,
-                VIN: vin,
-                FuelTypePrimary: fuel,
-                Seats: seats,
-                TopSpeedMPH: max_top_speed,
-                TransmissionStyle: transmission,
-                TransmissionSpeeds: transmission_size,
-            } } = await axios.get('https://cors-anywhere.herokuapp.com/https://car.metabit.workers.dev/'+ this.form.vin + '/' + this.form.model_year)
-            
-
-            try { 
-                await axios.post(buildUrl('/api/vehicles'), Object.assign({
-                    make, model, trim , model_year, vin, fuel, seats, max_top_speed, transmission, transmission_size,
-                }, this.form))
-            } catch (e) {
-                this.form.errors = e.response.data.errors;
-                return;
+            if (!form.id) {
+                this.$store.dispatch('createVehicle', form)
+            } else {
+                console.log('No edit method defined')
             }
-        }
+        },
+        async onDelete(data) {
+            await this.$store.dispatch('deleteVehicle', data);
+            Spork.toast('Deleted ' + data.name);
+        },
+        async onExecute({ actionToRun, selectedItems}) {
+            try {
+                await this.$store.dispatch('executeAction', {
+                    url: actionToRun.url,
+                    data: {
+                        selectedItems
+                    },
+                });
+                Spork.toast('Success! Running action...');
+
+            } catch (e) {
+                Spork.toast(e.message, 'error');
+            }
+        },
     },
     mounted() {
     }

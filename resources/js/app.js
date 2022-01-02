@@ -1,9 +1,11 @@
 import './bootstrap';
 import SporkApp from './SporkApp';
+import Toaster from "@meforma/vue-toaster";
 
 import { createApp } from 'vue';
 
 const app = createApp({});
+app.use(Toaster);
 
 window.Spork = new SporkApp(app);
 
@@ -14,7 +16,29 @@ Spork.component('dual-menu-panel', require('./components/DualMenuPanel').default
 Spork.setupStore({
     Authentication: require('./store/Authentication').default,
     Feature: require('./store/Feature').default,
+    ActivityLog: require('./store/ActivityLog').default,
 })
+
+
+Spork.build(async ({ store, router }) => {
+    await axios.get('/sanctum/csrf-cookie');
+    await store.dispatch('fetchUser');
+    if (!store.getters.isAuthenticated && router.currentRoute.path !== '/login') {
+        router.push('/login');
+        return;
+    }
+    store.dispatch('getFeatureLists', {
+        include: 'accounts',
+    })
+
+    store.dispatch('fetchLogs', {
+        filter: {
+            subject_type: 'Spork\\Greenhouse\\Models\\Plant'
+        },
+        include: 'causer,subject',
+    })
+});
+
 
 require('@system/news/resources/app');
 require('@system/finance/resources/app');
@@ -23,60 +47,8 @@ require('@system/maintenance/resources/app');
 require('@system/planning/resources/app');
 require('@system/research/resources/app');
 require('@system/shopping/resources/app');
-require('@system/seeds/resources/app');
+require('@system/greenhouse/resources/app');
 
 Spork.routesFor('authentication', [
     Spork.authenticatedRoute('settings', './routes/Profile/UserAccount'),
 ]);
-
-Spork.build(async ({ store, router }) => {
-    await store.dispatch('fetchUser');
-
-    store.dispatch('getFeatureLists', {
-        include: 'accounts',
-    })
-});
-
-// const router = createRouter({
-//     history: createWebHistory(),
-//     routes: [
-//         authenticatedRoute('/', './routes/Base', {
-//             children: [
-//                 authenticatedRoute('/shopping', './routes/Shopping/Shopping', {
-//                     children: [
-//                         authenticatedRoute('shopping/order', './routes/Shopping/PastOrders'),
-//                         authenticatedRoute('shopping/cart', './routes/Shopping/Cart'),
-//                         authenticatedRoute('', './routes/Shopping/Store'),
-//                     ]
-//                 }),
-                
-
-//                 ...(process.env.MIX_ADD_SERVER_SUPPORT === 'true' ? [
-//                     authenticatedRoute('/servers', './routes/Servers/Servers', {
-//                         children: [
-//                             authenticatedRoute('dashboard', './routes/Servers/Dashboard'),
-//                         ],
-//                     }),
-    
-//                 ] : [])
-//             ],
-//         }),
-
-//         unauthenticatedRoute('/:pathMatch(.*)', './routes/Auth/Login'),
-
-//     ]
-// })
-
-// : {
-//     Authentication,
-//     CalendarStore,
-//     FeatureStore,
-//     MaintenanceStore,
-//     PlanningStore,
-//     ResearchStore,
-//     ShoppingStore,
-//     NewsStore,
-//     Account,
-//     Transaction,
-//     Servers
-// }

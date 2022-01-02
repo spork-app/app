@@ -9,7 +9,7 @@
 
 <script>
     import DualMenuPanel from "@components/DualMenuPanel";
-    import {HomeIcon, PencilIcon, PhoneIcon, CogIcon } from "@heroicons/vue/outline";
+    import {HomeIcon, PencilIcon, DocumentAddIcon, CogIcon } from "@heroicons/vue/outline";
 
     export default {
         name: "Finance",
@@ -24,6 +24,12 @@
                         name: 'Dashboard',
                         href: '/finance/dashboard',
                         icon: HomeIcon,
+                        current: false,
+                    },
+                    {
+                        name: 'Bills',
+                        href: '/finance/bills',
+                        icon: DocumentAddIcon,
                         current: false,
                     },
                     {

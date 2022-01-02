@@ -73,7 +73,7 @@ export default {
             this.creating = true;
             // Send new task to server
             axios
-                .post("/api/tasks", this.newTask)
+                .post("/api/planning/tasks", this.newTask)
                 .then(res => {
                     // Tell the parent component we've added a new task and include it
                     this.$emit("task-added", res.data);

@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Client::class, function () {
             $client = new Client();
-            $client->setSporklicationName('APP_NAME');
+            $client->setApplicationName('APP_NAME');
             $client->setDeveloperKey(env('GOOGLE_SEARCH_API_KEY'));
             return $client;
         });

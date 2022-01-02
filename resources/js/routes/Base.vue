@@ -84,10 +84,6 @@ const icons = {};
     const { [icon]: iconComponent } = require('@heroicons/vue/outline');
 
     icons[icon] = iconComponent;
-
-    console.log({
-        [icon]: iconComponent,
-    })
 })
 
 export default {

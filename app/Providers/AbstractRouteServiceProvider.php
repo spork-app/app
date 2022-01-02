@@ -3,18 +3,17 @@
 namespace App\Providers;
 
 use App\Models\FeatureList;
-use App\Models\Property;
 use Spork\Finance\Models\Account;
 use Spork\Finance\Models\Transaction;
-use Spork\Garage\Models\Vehicle;
-use Spork\Calendar\Models\Calendar;
+use App\Garage\Models\Vehicle;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Kregel\LaravelAbstract\AbstractEloquentModel;
 use Kregel\LaravelAbstract\Exceptions\ModelNotInstanceOfAbstractEloquentModel;
-use Spork\Seeds\Models\Seed;
-use Spork\Seeds\Models\Plant;
+use App\Models\ActivityLog;
+use Spork\Greenhouse\Models\Seed;
+use Spork\Greenhouse\Models\Plant;
 
 class AbstractRouteServiceProvider extends ServiceProvider
 {
@@ -24,16 +23,16 @@ class AbstractRouteServiceProvider extends ServiceProvider
 
         abstracted()
             ->bypass(true)
-            ->middleware(['web'])
+            ->middleware(['api', 'auth:sanctum'])
             ->route([
                 'users' => User::class,
                 'vehicles' => Vehicle::class,
-                'properties' => Property::class,
                 'feature-list' => FeatureList::class,
                 'account' => Account::class,
                 'transaction' => Transaction::class,
-                'seeds' => Seed::class,
                 'plants' => Plant::class,
+                'seeds' => Seed::class,
+                'activity-logs' => ActivityLog::class,
             ]);
 
         Route::bind('abstract_model', abstracted()->resolveModelsUsing ?? function ($value) {

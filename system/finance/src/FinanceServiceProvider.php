@@ -3,11 +3,12 @@
 namespace Spork\Finance;
 
 use App\Spork;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Spork\Finance\Contracts\Services\PlaidServiceContract;
 use Spork\Finance\Services\PlaidService;
-use Illuminate\Support\ServiceProvider;
 
-class FinanceServiceProvider extends ServiceProvider
+class FinanceServiceProvider extends RouteServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -27,6 +28,12 @@ class FinanceServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(PlaidServiceContract::class, PlaidService::class);
-        Spork::addFeature('finance', 'LibraryIcon', '/finance');
+        Spork::addFeature('finance', 'LibraryIcon', '/finance/dashboard');
+    }
+
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web')
+            ->group(__DIR__ . '/../routes/web.php');
     }
 }

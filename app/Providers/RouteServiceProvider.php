@@ -39,54 +39,28 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::post('webhooks/events', function (Request $request) {
-                info($request->get('status'), $request->all());
-
-                return $request->all();
-            });
-            Route::post('webhooks/answer', function (Request $request) {
-                return response()->json([
-                    [
-                        "action" => "talk",
-                        "text" => "Janet here, connecting you now"
-                    ],
-                    [
-                        "action" => "connect",
-                        "from" => $request->get('from'),
-                        "endpoint" => [
-                            [
-                                "type" => "websocket",
-                                "uri" => sprintf("wss://%s/socket", 'voice.kregel.cloud'),
-                                "content-type" => "audio/l16;rate=16000",
-                                "headers" => $request->all(),
-                            ]
-                        ]
-                    ]
-                ]);
-            });
-
             Route::prefix('api')
-                ->middleware('api')
+                ->middleware(['auth:sanctum'])
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
-
-            Fortify::createUsersUsing(CreateNewUser::class);
-            Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-            Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
-            Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
-            RateLimiter::for('login', fn (Request $request) => Limit::perMinute(600)->by($request->email.$request->ip()));
-            RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(600)->by($request->session()->get('login.id')));
-
-            Fortify::loginView(fn() => view('auth.login'));
-            Fortify::registerView(fn() => view('auth.register'));
-            Fortify::requestPasswordResetLinkView(fn() => view('auth.passwords.email'));
-            Fortify::resetPasswordView(fn() => view('auth.passwords.reset'));
-            Fortify::confirmPasswordView(fn() => view('auth.passwords.confirm'));
-
         });
+
+
+        Fortify::createUsersUsing(CreateNewUser::class);
+        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        RateLimiter::for('login', fn (Request $request) => Limit::perMinute(600)->by($request->email.$request->ip()));
+        RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(600)->by($request->session()->get('login.id')));
+
+        Fortify::loginView(fn() => view('auth.login'));
+        Fortify::registerView(fn() => view('auth.register'));
+        Fortify::requestPasswordResetLinkView(fn() => view('auth.passwords.email'));
+        Fortify::resetPasswordView(fn() => view('auth.passwords.reset'));
+        Fortify::confirmPasswordView(fn() => view('auth.passwords.confirm'));
     }
 
     /**

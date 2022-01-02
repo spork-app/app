@@ -6,7 +6,9 @@ module.exports = {
     './storage/framework/views/*.php',
     './resources/views/**/*.blade.php',
     './resources/js/**/*.vue',
-
+    './system/*/resources/views/**/*.blade.php',
+    './system/*/resources/js/**/*.vue',
+    './system/*/resources/js/**/*.js',
   ],
   darkMode: 'media', // or 'media' or 'class'
   theme: {

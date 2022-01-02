@@ -109,6 +109,13 @@
       0 => 'Spatie\\EloquentSortable\\EloquentSortableServiceProvider',
     ),
   ),
+  'spatie/laravel-activitylog' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
+    ),
+  ),
   'spatie/laravel-query-builder' => 
   array (
     'providers' => 

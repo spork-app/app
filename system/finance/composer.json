@@ -9,7 +9,9 @@
             "email": "5355937+austinkregel@users.noreply.github.com"
         }
     ],
-    "require": {},
+    "require": {
+        "tomorrow-ideas/plaid-sdk-php": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "Spork\\Finance\\": "src/"

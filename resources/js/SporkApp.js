@@ -102,4 +102,8 @@ export default class SporkApp {
             }
         }, extraOptions))
     }
+
+    toast(message, type = 'success') {
+        this.app.$toast[type](message);
+    }
 }

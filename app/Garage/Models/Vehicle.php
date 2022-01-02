@@ -2,8 +2,8 @@
 
 namespace App\Garage\Models;
 
-use App\Core\Models\AbstractModel;
-use App\Maintenance\Traits\Workable;
+use App\Models\AbstractModel;
+use Spork\Maintenance\Traits\Workable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Tags\HasTags;
 

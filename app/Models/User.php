@@ -8,7 +8,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Telescope\Avatar;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -47,6 +49,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function booted()
     {
         parent::booted();
+
+        self::creating(function (User $user) {
+            $user->profile_photo = 'https://www.gravatar.com/avatar/'.md5(Str::lower($user->email)).'?s=200';
+        });
 
         self::created(function ($user) {
             $user->statuses()->create([

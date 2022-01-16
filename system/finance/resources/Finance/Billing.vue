@@ -1,18 +1,23 @@
 <template>
     <div class="flex flex-wrap mt-4">
-        <div class="w-full py-2 px-4 text-2xl font-bold text-gray-800">Bills Dashboard</div>
-        <div class="w-full pb-4 px-4 text-base font-base text-gray-500">Greetings! You should expect $503 to be withdrawn today.</div>
+        <div class="w-full py-2 px-4 text-2xl font-bold text-gray-800 flex items-center justify-between">
+            <span>Bills Dashboard</span>
+            <span>
+                <feature-required feature="budget" />
+            </span>
+        </div>
+        <div class="w-full pb-4 px-4 text-base font-base text-gray-500">Greetings! It's 2021-01-01. You should expect $420.20 to be withdrawn today.</div>
         <!-- The billing information -->
         <div class="w-full flex flex-wrap py-4 m-4 bg-white rounded-lg shadow">
             <div class="w-full flex mx-4 rounded-full overflow-none bg-gray-200 my-2 text-white font-bold items-center">
-                <div style="width: 43.33333%; border-radius: 50px 0 0 50px;" class="bg-green-500 p-4 text-center"></div>
-                <div style="width: 25.2%;" class="bg-yellow-500 p-4 text-center"></div>
-                <div style=" border-radius: 0 50px 50px 0" class="flex-grow bg-blue-600 p-4 text-center"></div>
+                <div :style="'width: '+((paidAmount/mtdAvailableAmount) * 100)+'%; border-radius: 50px 0 0 50px;'" class="bg-green-500 p-4 text-center"></div>
+                <div :style="'width: '+((reservedAmount/mtdAvailableAmount) * 100)+'%;'" class="bg-yellow-500 p-4 text-center"></div>
+                <div :style="'width: '+(((availableAmount - reservedAmount)/mtdAvailableAmount) * 100)+'%; border-radius: 0 50px 50px 0'" class="flex-grow bg-blue-600 p-4 text-center"></div>
             </div>
             <div class="w-full flex flex-col mx-4 gap-2 mt-2 pl-4">
                 <div class="flex items-center gap-2"><span class="bg-green-500 p-2 w-4 h-4 rounded-full"></span>Paid (${{ paidAmount }})</div>
                 <div class="flex items-center gap-2"><span class="bg-yellow-500 p-2 w-4 h-4 rounded-full"></span>Reserved for bills/savings (${{ reservedAmount }})</div>
-                <div class="flex items-center gap-2"><span class="bg-blue-500 p-2 w-4 h-4 rounded-full"></span>Slush (${{ Math.round((1620 - (reservedAmount)) * 100)/ 100}})</div>
+                <div class="flex items-center gap-2"><span class="bg-blue-500 p-2 w-4 h-4 rounded-full"></span>Slush (${{ Math.round((availableAmount - (reservedAmount)) * 100)/ 100}})</div>
             </div>
         </div>
         
@@ -40,7 +45,7 @@
                     <div class="w-8">
                         <check-icon class="text-green-500 fill-current"></check-icon>
                     </div>  
-                        
+
                     <div class="flex flex-wrap w-full items-center py-2">
                         <div class="w-full flex justify-between items-center">
                             <div class="font-medium">{{ transaction.name }}</div>
@@ -52,7 +57,6 @@
                             <div class="text-right">{{ transaction.date }}</div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -221,6 +225,12 @@ export default {
         },
         reservedAmount() {
             return this.pendingBills.map(bill => bill.amount).reduce((a, b) => a + b, 0) + this.futureBills.map(bill => bill.amount).reduce((a, b) => a + b, 0);
+        },
+        availableAmount() {
+            return 1620;
+        },
+        mtdAvailableAmount() {
+            return 2600;
         },
         stats() {
             return [

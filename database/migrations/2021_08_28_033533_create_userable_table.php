@@ -16,7 +16,7 @@ class CreateUserableTable extends Migration
         Schema::create('userable', function (Blueprint $table) {
             $table->id();
             $table->morphs('userable');
-            $table->foreignIdFor(\App\Core\Models\User::class);
+            $table->foreignIdFor(\App\Models\User::class);
             $table->string('role')->default('user');
             $table->json('settings');
             $table->timestamps();

@@ -54,7 +54,7 @@
                     <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                     <div>
                         <p class="text-sm text-gray-500">
-                        {{ event.description }} <a :href="'/greenhouse/plants'" class="font-medium text-gray-900">{{ event.subject }}</a>
+                        {{ event.description }} <a :href="'/greenhouse/plants'" class="font-medium text-gray-900">{{ event?.subject?.name }}</a>
                         </p>
                     </div>
                     <div class="text-right text-sm whitespace-nowrap text-gray-500">

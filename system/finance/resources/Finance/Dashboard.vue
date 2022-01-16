@@ -4,7 +4,7 @@
         <div class="w-full pb-8 px-4 text-base font-base text-gray-500">Welcome Back, {{$store.getters.user.name}}!</div>
 
         <div class="grid grid-cols-4 gap-4 w-full px-4">
-            <div class="min-w-1/4 flex-1" v-for="(account, i) in $store.getters.allAccountsFromFeatures.slice(0, 8)" :key="'dashboard'+i">
+            <div class="min-w-1/4 flex-1" v-for="(account, i) in $store.getters.allAccountsFromFeatures?.slice(0, 8)" :key="'dashboard'+i">
                 <div class="bg-white shadow rounded-xl flex flex-col w-full p-4">
                     <div class="text-gray-600">{{account.name}}</div>
 
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="$store.getters.allAccountsFromFeatures.length > 8" class="text-right w-full pt-4 px-4">
+        <div v-if="$store.getters.allAccountsFromFeatures?.length > 8" class="text-right w-full pt-4 px-4">
             <a href="/finance/accounts">
                 View all accounts
             </a>

@@ -12,7 +12,9 @@
             
                 <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
                     <div>
-                        <research v-model="form" />
+                        <research v-model="form" v-if="feature === 'research'"/>
+
+                        <budget v-model="form" v-if="feature === 'budget'"/>
                     </div>
                     <div v-for="(item, key) in $store.getters.featureErrors" :key="key">
                         <div v-for="error in item" :key="error" class="text-red-500">{{ error  }}</div>
@@ -42,10 +44,11 @@
 <script>
 import { ref } from 'vue';
 import Research from './Features/Research';
+import Budget from './Features/Budget';
 
 export default {
     props: ['feature', 'allowMoreThanOne'],
-    components: { Research },
+    components: { Research, Budget },
     computed: {
         actualFeature() {
             return this.$store.getters.features[this.feature]

@@ -7,6 +7,11 @@ use Illuminate\Support\ServiceProvider;
 
 class AnalyticsServiceProvider extends ServiceProvider
 {
+    protected $listen = [
+        Registered::class => [],
+    ];
+
+
     public function boot()
     {
 

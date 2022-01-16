@@ -24,7 +24,7 @@ class CreateWorkOrdersTable extends Migration
             $table->dateTime('due_at')->nullable();
 
             $table->string('priority');
-            $table->foreignIdFor(App\Core\Models\User::class, 'assignee_id')->nullable();
+            $table->foreignIdFor(App\Models\User::class, 'assignee_id')->nullable();
 
             $table->dateTime('started_at')->nullable();
             $table->dateTime('completed_at')->nullable();

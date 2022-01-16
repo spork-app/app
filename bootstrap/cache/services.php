@@ -56,7 +56,8 @@
     52 => 'Spork\\Research\\ResearchServiceProvider',
     53 => 'Spork\\Shopping\\ShoppingServiceProvider',
     54 => 'Spork\\Greenhouse\\PlantServiceProvider',
-    55 => 'App\\Providers\\AbstractRouteServiceProvider',
+    55 => 'Spork\\Food\\FoodServiceProvider',
+    56 => 'App\\Providers\\AbstractRouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -101,7 +102,8 @@
     38 => 'Spork\\Research\\ResearchServiceProvider',
     39 => 'Spork\\Shopping\\ShoppingServiceProvider',
     40 => 'Spork\\Greenhouse\\PlantServiceProvider',
-    41 => 'App\\Providers\\AbstractRouteServiceProvider',
+    41 => 'Spork\\Food\\FoodServiceProvider',
+    42 => 'App\\Providers\\AbstractRouteServiceProvider',
   ),
   'deferred' => 
   array (

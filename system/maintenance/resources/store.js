@@ -37,7 +37,11 @@ export default {
             }
         }, 
         async deleteVehicle({ state, commit }, vehicle) {
-            await axios.delete(buildUrl('/api/vehicles/' + vehicle.id));
+            await axios.delete(buildUrl('/api/vehicle/' + vehicle.id));
+            state.vehicles = state.vehicles.filter(v => v.id !== vehicle.id);
+        },
+        async deleteProperty({ state, commit }, vehicle) {
+            await axios.delete(buildUrl('/api/property/' + vehicle.id));
             state.vehicles = state.vehicles.filter(v => v.id !== vehicle.id);
         },
         async fetchProperties({ state, commit }) {

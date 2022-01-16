@@ -18,7 +18,7 @@ class CreateResearchNotesTable extends Migration
             $table->string('name')->nullable()->nullable();
             $table->longText('body')->nullable();
             $table->string('url', 2048)->nullable();
-            $table->foreignIdFor(\App\Core\Models\FeatureList::class);
+            $table->foreignIdFor(\App\Models\FeatureList::class);
             $table->timestamps();
         });
     }

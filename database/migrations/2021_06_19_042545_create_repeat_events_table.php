@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Models\FeatureList;
+use App\Models\FeatureList;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -33,7 +33,7 @@ class CreateRepeatEventsTable extends Migration
             $table->string('frequency')->nullable();
 
             $table->foreignIdFor(FeatureList::class);
-            $table->foreignIdFor(App\Core\Models\User::class);
+            $table->foreignIdFor(App\Models\User::class);
 
             $table->string('weekday_start')->nullable();
             $table->integer('number_of_occurrences')->nullable();

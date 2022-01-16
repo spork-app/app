@@ -19,13 +19,13 @@ class CreateFeatureListsTable extends Migration
             $table->string('name');
             $table->json('settings');
 
-            $table->foreignIdFor(App\Core\Models\User::class);
+            $table->foreignIdFor(App\Models\User::class);
             $table->timestamps();
         });
         Schema::create('feature_list_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Core\Models\FeatureList::class, 'feature_list_id');
-            $table->foreignIdFor(\App\Core\Models\User::class, 'user_id');
+            $table->foreignIdFor(\App\Models\FeatureList::class, 'feature_list_id');
+            $table->foreignIdFor(\App\Models\User::class, 'user_id');
             $table->string('role')->default('user');
             $table->timestamps();
         });

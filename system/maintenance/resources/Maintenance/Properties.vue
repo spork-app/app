@@ -71,7 +71,33 @@ export default {
         dateFormat(property) {
             return '<span class="text-gray-900">' + property.starts_at  + '  at </span>' +
                 '<span class="text-gray-800">' + dayjs(property.last_occurrence || property.remind_at).format('h:mma') + '</span>'
-        }
+        },
+        
+        async save(form) {
+            if (!form.id) {
+                this.$store.dispatch('createProperty', form)
+            } else {
+                console.log('No edit method defined')
+            }
+        },
+        async onDelete(data) {
+            await this.$store.dispatch('deleteProperty', data);
+            Spork.toast('Deleted ' + data.name);
+        },
+        async onExecute({ actionToRun, selectedItems}) {
+            try {
+                await this.$store.dispatch('executeAction', {
+                    url: actionToRun.url,
+                    data: {
+                        selectedItems
+                    },
+                });
+                Spork.toast('Success! Running action...');
+
+            } catch (e) {
+                Spork.toast(e.message, 'error');
+            }
+        },
     },
     mounted() {
     }

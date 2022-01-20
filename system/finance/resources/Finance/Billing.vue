@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-wrap mt-4">
-        <div class="w-full py-2 px-4 text-2xl font-bold text-gray-800 flex items-center justify-between">
+        <div class="w-full py-2 px-4 text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center justify-between">
             <span>Bills Dashboard</span>
             <span>
                 <feature-required feature="budget" />
             </span>
         </div>
-        <div class="w-full pb-4 px-4 text-base font-base text-gray-500">Greetings! It's 2021-01-01. You should expect $420.20 to be withdrawn today.</div>
+        <div class="w-full pb-4 px-4 text-base font-base text-gray-500 dark:text-gray-300">Greetings! It's 2021-01-01. You should expect $420.20 to be withdrawn today.</div>
         <!-- The billing information -->
-        <div class="w-full flex flex-wrap py-4 m-4 bg-white rounded-lg shadow">
+        <div class="w-full flex flex-wrap py-4 m-4 bg-white dark:bg-gray-600 rounded-lg shadow">
             <div class="w-full flex mx-4 rounded-full overflow-none bg-gray-200 my-2 text-white font-bold items-center">
                 <div :style="'width: '+((paidAmount/mtdAvailableAmount) * 100)+'%; border-radius: 50px 0 0 50px;'" class="bg-green-500 p-4 text-center"></div>
                 <div :style="'width: '+((reservedAmount/mtdAvailableAmount) * 100)+'%;'" class="bg-yellow-500 p-4 text-center"></div>
@@ -22,16 +22,16 @@
         </div>
         
         <div class="w-full px-4">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-50">
                 Month to date
             </h3>
 
             <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                <div v-for="item in stats" :key="item.name" class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                <div v-for="item in stats" :key="item.name" class="px-4 py-5 bg-white dark:bg-gray-600 shadow rounded-lg overflow-hidden sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-300 truncate">
                     {{ item.name }}
                     </dt>
-                    <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100">
                     {{ item.stat }}
                     </dd>
                 </div>
@@ -40,7 +40,7 @@
 
         <div class="w-1/3">
             <div class="m-4 text-xl font-medium">Paid bills</div>
-            <div class="bg-white shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
+            <div class="bg-white dark:bg-gray-600 shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
                 <div class="flex w-full items-center gap-2" v-for="transaction in paidBills" :key="transaction">
                     <div class="w-8">
                         <check-icon class="text-green-500 fill-current"></check-icon>
@@ -49,11 +49,11 @@
                     <div class="flex flex-wrap w-full items-center py-2">
                         <div class="w-full flex justify-between items-center">
                             <div class="font-medium">{{ transaction.name }}</div>
-                            <div class="text-right text-gray-700 font-bold">${{ transaction.amount}}</div>
+                            <div class="text-right text-gray-700 dark:text-gray-200 font-bold">${{ transaction.amount}}</div>
                         </div>
 
                         <div class="w-full flex justify-between items-center text-sm text-gray-600">
-                            <div class="text-gray-500">{{ transaction.category }}</div>
+                            <div class="text-gray-500 dark:text-gray-300">{{ transaction.category }}</div>
                             <div class="text-right">{{ transaction.date }}</div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="w-1/3">
             <div class="m-4 text-xl font-medium">Pending bills</div>
-            <div class="bg-white shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
+            <div class="bg-white dark:bg-gray-600 shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
                 <div class="flex w-full items-center gap-2" v-for="transaction in pendingBills" :key="transaction">
                     <div class="w-8">
                         <refresh-icon class="text-yellow-500 fill-current"></refresh-icon>
@@ -71,11 +71,11 @@
                     <div class="flex flex-wrap w-full items-center py-2">
                         <div class="w-full flex justify-between items-center">
                             <div class="font-medium">{{ transaction.name }}</div>
-                            <div class="text-right text-gray-700 font-bold">${{ transaction.amount}}</div>
+                            <div class="text-right text-gray-700 dark:text-gray-200 font-bold">${{ transaction.amount}}</div>
                         </div>
 
                         <div class="w-full flex justify-between items-center text-sm text-gray-600">
-                            <div class="text-gray-500">{{ transaction.category }}</div>
+                            <div class="text-gray-500 dark:text-gray-300">{{ transaction.category }}</div>
                             <div class="text-right">{{ transaction.date }}</div>
                         </div>
                     </div>
@@ -85,8 +85,8 @@
         </div>
         <div class="w-1/3">
             <div class="m-4 text-xl font-medium">Future Bills</div>
-            <div class="bg-white shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
-                <div class="flex w-full items-center gap-2" v-for="transaction in futureBills" :key="transaction">
+            <div class="bg-white dark:bg-gray-600 shadow overflow-hidden sm:rounded-md m-4 px-4 py-2 flex flex-col max-h-4xl divide-y divide-gray-200 items-center">
+               <div class="flex w-full items-center gap-2" v-for="transaction in futureBills" :key="transaction">
                     <div class="w-8">
                         <clock-icon class="text-yellow-600 fill-current"></clock-icon>
                     </div>  
@@ -94,12 +94,12 @@
                     <div class="flex flex-wrap w-full items-center py-2">
                         <div class="w-full flex justify-between items-center">
                             <div class="font-medium">{{ transaction.name }}</div>
-                            <div class="text-right text-gray-700 font-bold">${{ transaction.amount}}</div>
+                            <div class="text-right text-gray-700 dark:text-gray-200 font-bold">${{ transaction.amount}}</div>
                         </div>
 
                         <div class="w-full flex justify-between items-center text-sm text-gray-600">
-                            <div class="text-gray-500">{{ transaction.category }}</div>
-                            <div class="text-right">Expected: {{ transaction.due_date }}</div>
+                            <div class="text-gray-500 dark:text-gray-300">{{ transaction.category }}</div>
+                            <div class="text-right">{{ transaction.date }}</div>
                         </div>
                     </div>
 

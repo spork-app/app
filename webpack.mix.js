@@ -14,6 +14,8 @@ const path = require('path');
 
 mix
     .postCss('resources/css/app.css', 'public/css', [
+        require('postcss-import'),
+        require('autoprefixer'),
         require('tailwindcss')
     ])
     .webpackConfig({

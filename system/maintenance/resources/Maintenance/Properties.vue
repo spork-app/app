@@ -25,13 +25,37 @@
                 <div>
                     <div class="grid grid-cols-6 gap-6 mt-2">
                         <div class="col-span-6">
-                            <label for="street-address" class="block text-sm font-medium text-gray-700">Street address</label>
+                            <label for="name" class="block text-sm font-medium">Name</label>
+                            <input type="text" name="name" id="name" class="mt-1 py-2 px-4 border focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                        </div>
+                        <div class="col-span-6">
+                            <label for="street-address" class="block text-sm font-medium">Street address</label>
                             <input type="text" name="state" id="state" class="mt-1 py-2 px-4 border focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                        </div>
+
+                        <div class="font-bold uppercase col-span-6 text-xs text-gray-600 dark:text-gray-50 tracking-wide">calendar integration</div>
+                        <div class="col-span-6 flex items-center mx-4">
+                            <div class="flex items-center h-5">
+                                <input id="track_air_filter" name="track_air_filter" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="track_air_filter" class="font-medium">Track airfilter replacements?</label>
+                                <p class="text-gray-500 dark:text-gray-300">Get notified every six months from your move-in date, to replace your airfilter.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-6 flex items-center mx-4">
+                            <div class="flex items-center h-5">
+                                <input id="track_water_filter" name="track_water_filter" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="track_water_filter" class="font-medium">Track water filter replacements?</label>
+                                <p class="text-gray-500 dark:text-gray-300">Get notified every three months from your move-in date, to replace your water filters.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </template>
-
             <template #no-data>No properties in your garage</template>
         </crud-view>
     </div>
@@ -47,10 +71,13 @@ export default {
             page: ref(1),
             createOpen: ref(false),
             form: ref(new Form({
-                vin: '',
-                model_year: 2019
+                address: '',
+                name: '',
+                is_prirmary_address: true,
+                track_air_filter: dayjs(),
+                track_water_filter: null,
+                // track_
             })),
-            years: [],
             date: ref(new Date()),
             decoded: ref({}),
         }

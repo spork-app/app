@@ -5,7 +5,6 @@ use App\Finance\Models\Account;
 use App\Finance\Services\PlaidService;
 use Google\Service\CustomSearchAPI;
 use Google\Service\CustomSearchAPI\Search;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,13 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/user', function () {
+    return auth()->user();
 })->middleware(['api', 'auth:sanctum']);
 
 Route::get('shopping-search', \Spork\Shopping\Http\Controller\ItemController::class);
-Route::middleware('auth:sanctum')->get('research', function (Request $request, \Google\Client $client) {
-    $page = $request->get('page', $request->get('start') / 10);
+Route::middleware(['api', 'auth:sanctum'])->get('research', function (\Google\Client $client) {
+    $page = request()->get('page', request()->get('start') / 10);
 
     /** @var Search $results */
     $results = cache()->remember(sprintf('%s.%s.google-search', $page, request()->get('q')), now()->addDay(), function () use ($client, $page) {
@@ -49,16 +48,16 @@ Route::middleware('auth:sanctum')->get('research', function (Request $request, \
     $parts = parse_url(request()->url());
 
     return (new \Illuminate\Pagination\LengthAwarePaginator($data, (int) $results->getSearchInformation()->totalResults, 10, $page, [
-        'path' => sprintf('%s://%s%s?%s', $parts['scheme'], $parts['host'], $parts['path'], http_build_query($request->except('page')))
+        'path' => sprintf('%s://%s%s?%s', $parts['scheme'], $parts['host'], $parts['path'], http_build_query(request()->except('page')))
     ]))->onEachSide(1);
 });
 
-Route::middleware('auth:sanctum')->get('weather', function (Request $request, \Spork\Weather\Contracts\Services\WeatherServiceContract $weatherService) {
+Route::middleware(['api', 'auth:sanctum'])->get('weather', function (\Spork\Weather\Contracts\Services\WeatherServiceContract $weatherService) {
     $propertu = \App\Core\Models\Property::first();
 
     return $weatherService->query($propertu->address);
 });
-Route::middleware('auth:sanctum')->get('news', function (Request $request, \Spork\News\Contracts\Service\NewsServiceContract $service) {
+Route::middleware(['api', 'auth:sanctum'])->get('news', function (\Spork\News\Contracts\Service\NewsServiceContract $service) {
     return $service->headlines('');
 });
 

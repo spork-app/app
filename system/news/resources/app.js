@@ -2,4 +2,6 @@ Spork.setupStore({
     News: require("./store").default,
 })
 
-Spork.component('news', require('./News').default);
+Spork.routesFor('news', [
+    Spork.authenticatedRoute('/news', require('./News').default),
+]);

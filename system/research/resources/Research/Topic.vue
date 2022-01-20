@@ -2,16 +2,15 @@
 h1 {
     @apply text-2xl;
 }
-
 </style>
 
 <template>
 <div class="h-full" v-if="topic">
     <div class="flex w-full h-screen overflow-auto">
         <div class="w-1/2 flex flex-col items-center">
-            <div class="w-full flex flex-wrap justify-between font-medium text-gray-700 px-4 py-2 border-r border-gray-200">
+            <div class="w-full flex flex-wrap justify-between font-medium text-gray-700 px-4 py-2 border-r border-gray-200 dark:border-gray-800">
                 <div class="text-center">{{ topic.name }}</div>
-                <button @click.prevent="stack = !stack" class="underline">
+                <button @click.prevent="stack = !stack" class="underline dark:text-gray-200">
                     {{ stack ? 'Full Preview': 'Edit'}}
                 </button>
             </div>
@@ -25,7 +24,7 @@ h1 {
                     @keydown.ctrl="ctrlSSaving"
                     @paste.prevent="textareaPaste"
                     v-model="topic.settings.body"
-                    class="w-full border-b border-gray-200 bg-white sync-scrolling border-l-0"
+                    class="w-full border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-600 sync-scrolling border-l-0"
                     ref="textarea"
                     style="height: calc((100vh - 40px)/2);"
                 >
@@ -33,14 +32,14 @@ h1 {
 
                 <div class="absolute bottom-0 left-0 pb-2 pl-2" :class="[showBold? 'font-bold': '']">Resources [{{ topic?.settings?.links?.length }}]</div>
             </div>
-            <div @mouseenter="(e) => active = e.target" @mouseleave="() => active = null" @scroll="scrollSync" class="w-full border-r border-gray-200 overflow-auto w-full flex mx-auto text-left sync-scrolling -mt-2" ref="markdown">
-                <Markdown :html="true" :source="markdownWithLinks" class="w-full py-8 mx-auto prose prose-sm"  style="height: calc((100vh - 40px)/2); "/>
+            <div @mouseenter="(e) => active = e.target" @mouseleave="() => active = null" @scroll="scrollSync" class="dark:text-gray-300 dark:border-gray-500 w-full border-r border-gray-200 overflow-auto w-full flex mx-auto text-left sync-scrolling -mt-2" ref="markdown">
+                <Markdown :html="true" :source="markdownWithLinks" class="w-full py-8 mx-auto prose prose-sm dark:prose-invert"  style="height: calc((100vh - 40px)/2); "/>
             </div>
         </div>
-        <div class="w-1/2 flex flex-col overflow-y-scroll bg-gray-50 gap-2" ref="research">
-            <input @keyup="searchDebounce(() => $store.dispatch('search', { search }), 250)" v-model="search" :placeholder="'Search: ' + topic.name" type="text" class="w-full px-4 py-2 bg-white border-b border-t-0 border-l-0 border-r-0 border-gray-200">
+        <div class="w-1/2 flex flex-col overflow-y-scroll bg-gray-50 dark:bg-gray-700 gap-2 " ref="research">
+            <input @keyup="searchDebounce(() => $store.dispatch('search', { search }), 250)" v-model="search" :placeholder="'Search: ' + topic.name" type="text" class="w-full px-4 py-2 bg-white dark:bg-gray-700 placeholder-gray-300 border-b border-t-0 border-l-0 border-r-0 border-gray-200 dark:border-gray-500">
 
-            <div v-if="!$store.getters.researchLoading" v-for="(item, $i) in $store.getters.research.data" :key="'research'+$i" class="relative rounded-lg border border-gray-300 bg-white px-4 py-2 mx-2 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+            <div v-if="!$store.getters.researchLoading" v-for="(item, $i) in $store.getters.research.data" :key="'research'+$i" class="relative rounded-lg border border-gray-300 dark:border-gray-500 bg-white px-4 py-2 mx-2 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                 <div class="flex-shrink-0">
                     <img class="h-10 w-10 rounded-full mt-2" :src="item.image" alt="">
                 </div>
@@ -54,7 +53,7 @@ h1 {
                             }
                             this.$store.dispatch('updateResearch', this.topic)
                         }"
-                        class="w-8 h-8 absolute bottom-0 right-0 z-10 border rounded-full flex items-center justify-center bg-white">
+                        class="w-8 h-8 absolute bottom-0 right-0 z-10 border rounded-full flex items-center justify-center bg-white dark:bg-gray-500">
                         <PlusIcon v-if="!topic.settings.links.includes(item.link)" class="w-3 h-3"></PlusIcon>
                         <CheckIcon v-else class="w-3 h-3"></CheckIcon>
                     </button>
@@ -72,7 +71,7 @@ h1 {
                 Loading...
             </div>
 
-            <div v-if="!$store.getters.research.total" class="px-4 italic text-gray-600">
+            <div v-if="!$store.getters.research.total" class="px-4 italic text-gray-600 dark:text-gray-300">
                 No search results
             </div>
 

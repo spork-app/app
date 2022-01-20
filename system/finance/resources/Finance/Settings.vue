@@ -3,8 +3,8 @@
         <div class="md:grid md:grid-cols-3 md:gap-6">
             <div class="md:col-span-1">
                 <div class="px-4 sm:px-0">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">Accounts</h3>
-                    <p class="mt-1 text-sm text-gray-600">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">Accounts</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-200">
                         This is where you can manage your accounts. CSVs must have the following columns: <code>account_id, and type</code>, the rest are technically optional.
                     </p>
                 </div>
@@ -13,9 +13,9 @@
                 <div v-for="(tokens, $i) in [$store.getters.manualFinance].filter(v => v)" :key="$i" class="mx-4">
                     <div class="w-full text-gray-600 uppercase">{{ tokens.name }}</div>
                     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" v-if="tokens?.accounts?.length > 0">
-                        <div v-for="item in tokens?.accounts" :key="item.id" class="relative pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden bg-white">
+                        <div v-for="item in tokens?.accounts" :key="item.id" class="relative pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden bg-white dark:bg-gray-600">
                             <dt>
-                                <div class="absolute bg-indigo-500 rounded-md p-3">
+                                <div class="absolute bg-blue-500 rounded-md p-3">
                                     <office-building-icon class="h-6 w-6 text-white" aria-hidden="true" />
                                 </div>
                                 <p class="ml-16 text-sm font-medium text-gray-500 truncate">{{ item.name }}</p>
@@ -24,9 +24,9 @@
                                 <p class="text-2xl font-semibold text-gray-900">
                                     {{ item.balance }}
                                 </p>
-                                <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6 flex justify-between items-center">
+                                <div class="absolute bottom-0 inset-x-0 bg-gray-5000 px-4 py-4 sm:px-6 flex justify-between items-center">
                                     <div class="text-sm">
-                                        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
                                         View<span class="sr-only"> {{ item.name }} transactions</span></a
                                         >
                                     </div>
@@ -39,7 +39,7 @@
                             </dd>
                         </div>
                     </dl>
-                    <div v-else class="p-4 bg-white italic text-gray-600 shadow rounded mt-2">
+                    <div v-else class="p-4 bg-white dark:bg-gray-600 italic text-gray-600 dark:text-gray-200 shadow rounded mt-2">
                         No accounts found.
                     </div>
                 </div>
@@ -53,11 +53,11 @@
 
                     <div class="my-4">
                         <div class="text-left">
-                            <label class="block text-sm font-medium text-gray-700" for="account_selector">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" for="account_selector">
                                 Finance Account (Link)
                             </label>
                             <div class="mt-2">
-                                <select v-model="link_id" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+                                <select v-model="link_id" class="block max-w-lg w-full shadow-sm bg-white dark:bg-gray-600 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 rounded-md">
                                     <option v-for="account in $store.getters.features.finance" :key="account.account_id" :value="account.id">{{ account.name }}</option>
                                 </select>
                             </div>
@@ -79,14 +79,13 @@
         <div class="md:grid md:grid-cols-3 md:gap-6">
             <div class="md:col-span-1">
                 <div class="px-4 sm:px-0">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">Transactions</h3>
-                    <p class="mt-1 text-sm text-gray-600">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">Transactions</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
                         You can upload your transactions here.
                     </p>
                 </div>
             </div>
             <div class="mt-5 md:mt-0 md:col-span-2">
-
                 <HeaderMapping
                     :value="transaction_mapping"
                     @input="(newMapping) => mapping = newMapping.value"
@@ -94,10 +93,10 @@
                     label="Update your account with transactions from a CSV"
                 >
                     <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700" for="account_selector">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" for="account_selector">
                             Account associated with these transactions
                         </label>
-                        <select v-model="account_id" id="account_selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <select v-model="account_id" id="account_selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                             <optgroup v-for="token in $store.getters.features?.finance" :label="token.name">
                                 <option v-for="account in token.accounts" :key="account.id" :value="account.account_id">{{ account.name }} &mdash; {{account?.feature?.name}}</option>
                             </optgroup>

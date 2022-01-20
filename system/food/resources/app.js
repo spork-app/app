@@ -4,4 +4,5 @@ Spork.setupStore({
 
 Spork.routesFor('food', [
     Spork.authenticatedRoute('/food', require('./Food/Food').default),
+    Spork.authenticatedRoute('/food/recipes/:slug', require('./Food/Food').default),
 ]);

@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
+use Spork\Food\Models\Attribute;
+use Spork\Food\Models\Family;
 use Spork\Food\Models\Recipe;
 
 Route::get('/recipes', function (Request $request) {
@@ -14,7 +16,7 @@ Route::get('/recipes', function (Request $request) {
 
 Route::post('/search', function (Request $request) {
     if (!$request->hasAny(['query', 'allergies', 'pairs', 'ingredients', 'difficulty', 'prepTime',])) {
-        return response()->redirectTo('/api/recipes');
+        return response()->redirectTo('/api/food/recipes');
     }
 
     $httpQuery = $request->get('query') ?? $request->get('prepTime') ?? 'difficulty ' . $request->get('difficulty');
@@ -53,7 +55,7 @@ Route::post('/search', function (Request $request) {
         $eloquentQuery->whereHas('ingredients.family', function (Builder $query) use ($request): void {
             $query->whereIn('type', $request->get('ingredients', []));
         });
-    }
+    }https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_214,q_auto,w_381/hellofresh_s3/image/61a928dee220e51bc5740b15-dda29365.jpg
 
     return $eloquentQuery->paginate(16);
 });
@@ -63,34 +65,36 @@ Route::get('recipes', function () {
         ->inRandomOrder()
         ->paginate(8);
 });
-Route::get('alergens', function () {
-    return Allergen::all();
+Route::get('allergens', function () {
+    return cache()->remember('allergens', now()->addHour(), fn() => Spork\Food\Models\Allergen::all());
 });
 Route::get('wine-attributes', function () {        
-    return Attribute::all();
+    return cache()->remember('wine-attributes', now()->addHour(),fn() => Attribute::all());
 });
 
 Route::get('ingredient-families', function () {        
-    return Family::all();
+    return cache()->remember('ingredient-families', now()->addHour(), fn() => Family::all());
 });
 
 Route::get('prep-times', function () {
-    /** @var array $items */
-    $items = Recipe::selectRaw('prepTime as time')
-        ->distinct()
-        ->whereNotNull('prepTime')
-        ->get()
-        ->map
-        ->time
-        ->map(function ($item) {
-            return str_replace('-', ' ', $item);
-        })
-        ->toArray();
+    return cache()->remember('prep-times', now()->addHour(), function () {
+         /** @var array $items */
+        $items = Recipe::selectRaw('prepTime as time')
+            ->distinct()
+            ->whereNotNull('prepTime')
+            ->get()
+            ->map
+            ->time
+            ->map(function ($item) {
+                return str_replace('-', ' ', $item);
+            })
+            ->toArray();
 
-    natsort($items);
+        natsort($items);
 
-    return Collection::make(array_values($items))
-        ->map(function ($item) {
-            return str_replace(' ', '-', $item);
-        });
+        return Collection::make(array_values($items))
+            ->map(function ($item) {
+                return str_replace(' ', '-', $item);
+            });
+    });
 });

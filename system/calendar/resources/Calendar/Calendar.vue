@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-wrap flex-grow w-full h-full">
-        <div style="width: 300px;" class="px-2 bg-white h-full flex flex-col justify-between w-full">
+        <div style="width: 300px;" class="px-2 bg-white dark:bg-gray-700 h-full flex flex-col justify-between w-full">
             <div>
                 <div class="w-full flex flex-wrap justify-between items-center">
-                    <button class="my-2 py-1 px-3 bg-blue-500 rounded-lg text-white">
+                    <button class="my-2 py-1 px-3 bg-blue-500 dark:bg-blue-600 rounded-lg text-white">
                         + Create
                     </button>
 
                     <div>
-                        <select :value="$store.getters.calendarOptions.type" @change="changeType" class="rounded border-gray-200">
+                        <select :value="$store.getters.calendarOptions.type" @change="changeType" class="rounded border-gray-200 dark:border-gray-500 dark:text-gray-100 dark:bg-gray-600">
                             <option value="month">Month</option>
                             <option value="week">Week</option>
                             <option value="4days">4 Days</option>

@@ -13,7 +13,7 @@ class FoodServiceProvider extends ServiceProvider
     {
         Spork::addFeature('Food', 'SparklesIcon', '/food');
 
-        Route::middleware($this->app->make('config')->get('spork.food.middleware', ['auth:sanctum']))
+        Route::middleware($this->app->make('config')->get('spork.food.middleware', ['web', 'auth:sanctum']))
             ->prefix('api/food')
             ->group(__DIR__ . '/../routes/web.php');
 

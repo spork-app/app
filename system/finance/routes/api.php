@@ -1,6 +1,12 @@
 <?php
 
-Route::middleware('auth:sanctum')->post('/finance/upload-accounts', function (Request $request) {
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Models\FeatureList;
+use Spork\Finance\Contracts\Services\PlaidServiceContract;
+use Spork\Finance\Models\Account;
+
+Route::middleware('auth:sanctum')->post('upload-accounts', function (Request $request) {
     $mapping = json_decode($request->get('mapping'));
     $filePath = $request->file('image')->store('local');
 
@@ -40,7 +46,7 @@ Route::middleware('auth:sanctum')->post('/finance/upload-accounts', function (Re
     return $accounts ?? [];
 
 });
-Route::middleware('auth:sanctum')->post('/finance/upload-transactions', function (Request $request) {
+Route::middleware('auth:sanctum')->post('upload-transactions', function (Request $request) {
     request()->validate([
         'account_id' => 'string|exists:accounts,account_id|required',
     ], $request->all());
@@ -130,8 +136,8 @@ Route::middleware('auth:sanctum')->post('/finance/upload-transactions', function
 });
 
 Route::middleware('auth:sanctum')->delete('account/{account}', fn(Account $account) => $account->delete());
-Route::middleware('auth:sanctum')->post('/plaid/create-link-token', fn (PlaidService $service) => response()->json($service->createLinkToken()));
-Route::middleware('auth:sanctum')->post('/plaid/exchange-token', function(PlaidService $service) {
+Route::middleware('auth:sanctum')->post('/plaid/create-link-token', fn (PlaidServiceContract $service) => response()->json($service->createLinkToken()));
+Route::middleware('auth:sanctum')->post('/plaid/exchange-token', function(PlaidServiceContract $service) {
     $response = $service->exchangeLinkTokenForAccessToken(request()->get('public_token'));
 
     return FeatureList::create([

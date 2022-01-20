@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-full  flex bg-gray-800">
+    <div class="w-full min-h-full flex bg-gray-800 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
         <div class="w-14 2xl:w-64 overflow-hidden flex flex-col justify-between">
             <div class="flex flex-col gap-2 text-gray-200">
                 <div class="p-4 flex items-center gap-4 text-2xl">
@@ -10,13 +10,13 @@
                 <nav class="flex-1 px-2 space-y-1" aria-label="Sidebar">
                     <template v-for="item in navigation" :key="item.name">
                         <div v-if="!item.children">
-                            <router-link :to="item.href" :class="[item.current ? 'bg-gray-900 text-gray-100' : 'bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-gray-200', 'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md']">
+                            <router-link :to="item.href" :class="[item.current ? 'bg-gray-900dark:bg-gray-800 text-gray-100' : 'bg-gray-800 dark:bg-gray-900 text-gray-200 hover:bg-gray-700 hover:text-gray-200', 'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md']">
                                 <component :is="item.icon" :class="[item.current ? 'text-gray-100' : 'text-gray-200 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6 stroke-current']" aria-hidden="true" />
                                 {{ item.name }}
                             </router-link>
                         </div>
                         <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
-                            <DisclosureButton :class="[item.current ? 'bg-gray-900 text-gray-100' : 'bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-gray-50', 'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500']">
+                            <DisclosureButton :class="[item.current ? 'bg-gray-900 dark:bg-gray-800 text-gray-100' : 'bg-gray-800 dark:bg-gray-900 text-gray-200 hover:bg-gray-700 hover:text-gray-50', 'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500']">
                                 <component :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6 text-gray-200 group-hover:text-gray-50 stroke-current" aria-hidden="true" />
                                 <span class="flex-1 2xl:block hidden">
                                     {{ item.name }}
@@ -39,8 +39,8 @@
 
             <div class="flex w-full justify-between items-center p-4 text-gray-100">
                 <div class="flex flex-wrap gap-2 items-center" v-if="$store.getters.isAuthenticated">
-                    <div class="w-8 h-8 rounded-full overflow-hidden bg-white">
-                        <img :src="'/user-img/'+ $store.getters.isAuthenticated.id" alt="User photo"/>
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-white dark:bg-gray-500">
+                        <img :src="$store.getters.isAuthenticated.profile_photo" alt="User photo"/>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-sm font-medium">{{ $store.getters.isAuthenticated.name}}</div>
@@ -52,7 +52,7 @@
                 </router-link>
             </div>
         </div>
-        <div class="flex-1 bg-gray-50 max-h-screen overflow-y-scroll">
+        <div class="flex-1 bg-gray-50 dark:bg-gray-700 max-h-screen overflow-y-scroll">
             <router-view v-if="!$store.getters.featuresLoading"></router-view>
             <div v-else class="flex items-center justify-center text-xl w-full h-full">
                 <refresh-icon class="animate-rotate w-8 h-8" />

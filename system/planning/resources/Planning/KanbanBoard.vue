@@ -1,8 +1,8 @@
 <template>
-    <div v-if="!$store.getters.tasksLoading" class="flex flex-wrap w-full gap-4 container mx-auto">
+    <div v-if="!$store.getters.tasksLoading" class="flex flex-wrap w-full gap-4 container mx-auto sm:px-4">
         <!-- Thank you https://github.com/messerli90/laravel-vue-kanban-tutorial :D -->
         <div class="w-full rounded-lg">
-            <div class="text-4xl font-medium text-blue-900 my-4">
+            <div class="text-4xl font-medium text-gray-900 dark:text-gray-50 my-4">
                 Planning
             </div>
         </div>
@@ -12,7 +12,7 @@
             :key="status.slug"
             class="flex-1 "
         >
-            <div class="rounded-md shadow-md text-gray-600 bg-gray-200 overflow-hidden">
+            <div class="rounded-md shadow-md text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 overflow-hidden">
                 <div class="p-3 flex justify-between items-baseline">
                     <div class="font-medium">
                         {{ status.title }}
@@ -24,7 +24,7 @@
                         Add Task
                     </button>
                 </div>
-                <div class="p-2 bg-white">
+                <div class="p-2 bg-white dark:bg-gray-600">
                     <!-- Tasks -->
                     <draggable
                         class="flex-1 gap-2 flex flex-col list-group"

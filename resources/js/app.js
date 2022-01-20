@@ -48,6 +48,7 @@ require('@system/planning/resources/app');
 require('@system/research/resources/app');
 require('@system/shopping/resources/app');
 require('@system/greenhouse/resources/app');
+require('@system/food/resources/app');
 
 Spork.routesFor('authentication', [
     Spork.authenticatedRoute('settings', './routes/Profile/UserAccount'),

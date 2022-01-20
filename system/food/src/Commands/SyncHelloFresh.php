@@ -31,21 +31,7 @@ class SyncHelloFresh extends Command
      */
     protected $description = 'Sync Recipes from HelloFresh';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle(HelloFreshServiceInterface $service)
     {
         $page = 1;
@@ -95,8 +81,12 @@ class SyncHelloFresh extends Command
             'canonicalLink',
         ]);
 
+        // At some point since it's creation in 2019, they updated their CDN link, but not what's served from their API it seems lol...
+        $fillable['imageLink'] = str_replace('https://d3hvwccx09j84u.cloudfront.net/0,0/image/', 'https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_214,q_auto,w_381/hellofresh_s3/image/', $fillable['imageLink']);
+
         if (!empty($model)) {
             $this->info('[-] Updating: ' . $result->name);
+
             $model->update(array_merge($fillable, [
                 'category' => isset($result->category) ? $result->category->name : null,
                 'yields' => json_encode($result->yields),

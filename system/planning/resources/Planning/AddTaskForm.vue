@@ -1,17 +1,17 @@
 <template>
     <form
-        class="relative flex flex-col justify-between bg-white rounded-md shadow overflow-hidden"
+        class="relative flex flex-col justify-between bg-white dark:bg-gray-500 rounded-md shadow overflow-hidden"
         @submit.prevent="handleAddNewTask"
     >
         <div class="p-3 flex-1">
             <input
-                class="block w-full px-2 py-1 text-lg border-b border-blue-800 rounded"
+                class="dark:bg-gray-600 placeholder-gray-300 block w-full px-2 py-1 text-lg rounded"
                 type="text"
                 placeholder="Enter a title"
                 v-model.trim="newTask.title"
             />
             <textarea
-                class="mt-3 p-2 block w-full p-1 border text-sm rounded"
+                class="dark:bg-gray-600 placeholder-gray-300 mt-3 p-2 block w-full p-1 text-sm rounded"
                 rows="2"
                 placeholder="Add a description (optional)"
                 v-model.trim="newTask.description"
@@ -22,11 +22,11 @@
                 </span>
             </div>
         </div>
-        <div class="p-3 flex justify-between items-end text-sm bg-blue-100">
+        <div class="p-3 flex justify-between items-end text-sm bg-blue-100 dark:bg-gray-700">
             <button
                 @click="$emit('task-canceled')"
                 type="reset"
-                class="py-1 leading-5 text-gray-600 hover:text-gray-700"
+                class="py-1 leading-5 text-gray-600 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400"
             >
                 Cancel
             </button>

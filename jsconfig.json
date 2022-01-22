@@ -1,0 +1,24 @@
+{
+    "eslint.validate": [
+        "javascript",
+        "vue"
+    ],      
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@*": [
+          "resources/js/*"
+        ],
+      }
+    },
+    "exclude": [
+      "node_modules",
+      "public"
+    ],
+    "include": [
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        "./system/**/*.js",
+        "./system/**/*.vue",
+    ]  
+  }

@@ -34,11 +34,11 @@
 </style>
 
 <template>
-    <div class="w-full">
-        <div class="w-full mx-auto row justify-content-center">
+    <div class="w-full relative">
+        <div class="w-full mx-auto row justify-content-center sticky shadow-lg top-0">
             <div class="flex flex-wrap w-full">
-                <div class="bg-white w-full mx-2 shadow rounded">
-                    <input v-model="search.query" type="text" @keyup.enter="searchQuery" class="w-full p-3 border-b border-gray-200 text-grey-800 focus:outline-none" placeholder="Search for things...">
+                <div class="bg-white dark:bg-gray-600 w-full mx-2">
+                    <input v-model="search.query" type="text" @keyup.enter="searchQuery" class="placeholder-gray-300 w-full p-3 border-b border-gray-200 dark:border-gray-500 dark:bg-gray-500 text-grey-800 focus:outline-none" placeholder="Search for things...">
                     <div class="flex flex-wrap">
                         <div class="w-full md:flex-1">
                             <div class="font-bold p-3 w-full">Avoid Allergens...</div>
@@ -103,12 +103,16 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-wrap container" v-if="!search.loading">
+        <div class="flex flex-wrap container rounded-t-lg" :style="'min-height:' + preservedHeight + 'px;'" ref="wrapper" v-if="!search.loading">
             <recipe v-for="recipe in recipes.data" :recipe="recipe" :key="recipe.id"></recipe>
+
+            <div class="w-full flex items-center justify-center">
+                <button class="load-more py-2 px-4 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-bold" @click="loadMore">Load More</button>
+            </div>
         </div>
-        <div class="w-full text-center" v-else>
-            <div class="loader mx-auto">
-                <svg class="mx-auto loader" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        <div class="w-full text-center relative" :style="'min-height:' + preservedHeight + 'px;'" v-else>
+            <div class="loader mx-auto absolute inset-x-0 bottom-0 " :style="'top:' +(preservedHeight-600)+'px;'">
+                <svg class="mx-auto loader -ml-8" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
                     <path opacity="0.2" fill="#000" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"/>
                     <path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z">
@@ -152,7 +156,8 @@
                     difficulty: 0,
                     prepTime: [],
                     loading: false
-                }
+                },
+                preservedHeight: 0,
             }
         },
         methods: {
@@ -196,14 +201,28 @@
             getNewRecipes(page = 1) {
                 this.search.loading = true;
                 axios.get('/api/food/recipes?page=' + page)
-                    .then(response => {
-                        this.recipes = response.data;
+                    .then(({ data }) => {
+                        if (page != 1) {
+                            const { data: recipes, ...pagination } = data;
+                            const { data: oldRecipes } = this.recipes;
+                            this.recipes = {
+                                ...pagination,
+                                data: oldRecipes.concat(recipes)
+                            }
+                        } else {
+                            this.recipes = data;
+                        }
+                                                
                         this.search.loading = false;
                     })
             },
             preptimeFormat(time) {
                 return time.replace('PT', '')
                     .replace('M', ' minutes')
+            },
+            loadMore() {
+                this.preservedHeight = this.$refs.wrapper.clientHeight
+                this.getNewRecipes(this.recipes.current_page + 1)
             }
         },
         mounted() {

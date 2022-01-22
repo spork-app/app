@@ -21,12 +21,12 @@
                         </div>
                     </div>
 
-                    <div class="w-full bg-white dark:bg-gray-500 shadow rounded-lg mt-4 flex flex-wrap items-center justify-between">
-                        <div class="bg-gray-600 relative border-b border-gray-300 w-full p-4 flex flex-wrap justify-between items-center rounded-t-lg">
+                    <div class="w-full bg-white dark:bg-gray-600 shadow rounded-lg mt-4 flex flex-wrap items-center justify-between">
+                        <div class="bg-gray-600 dark:bg-gray-800 relative border-b border-gray-300 w-full p-4 flex flex-wrap justify-between items-center rounded-t-lg">
                             <div>
                                 <input @change="selectAll" type="checkbox">
                             </div>
-                            <button @click="filtersOpen= !filtersOpen" class="focus:outline-none flex flex-wrap items-center p-2 rounded-lg" :class="{'bg-gray-300 dark:bg-gray-700': filtersOpen, 'bg-gray-100 dark:bg-gray-800': !filtersOpen}">
+                            <button @click="filtersOpen= !filtersOpen" class="focus:outline-none flex flex-wrap items-center p-2 rounded-lg" :class="{'bg-gray-300 dark:bg-gray-700': filtersOpen, 'bg-gray-100 dark:bg-gray-900': !filtersOpen}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>

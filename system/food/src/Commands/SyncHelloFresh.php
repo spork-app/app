@@ -52,12 +52,7 @@ class SyncHelloFresh extends Command
             return;
         }
 
-        /** @var Recipe $recipe */
-        $model = Recipe::where('id', $result->id)
-            ->orWhere('slug', $result->slug)
-            ->first();
-
-        $fillable = Arr::only(json_decode(json_encode($result), true), [
+        $data = $fillable = array_merge(Arr::only(json_decode(json_encode($result), true), [
             'id',
             'country',
             'type',
@@ -79,30 +74,18 @@ class SyncHelloFresh extends Command
             'clonedFrom',
             'canonical',
             'canonicalLink',
+        ]), [
+            'category' => isset($result->category) ? $result->category->name : null,
+            'yields' => json_encode($result->yields),
+            'imageLink' => 'https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_432,q_auto,w_768/hellofresh_s3'. $result->imagePath
         ]);
 
-        // At some point since it's creation in 2019, they updated their CDN link, but not what's served from their API it seems lol...
-        $fillable['imageLink'] = str_replace('https://d3hvwccx09j84u.cloudfront.net/0,0/image/', 'https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_214,q_auto,w_381/hellofresh_s3/image/', $fillable['imageLink']);
-
-        if (!empty($model)) {
-            $this->info('[-] Updating: ' . $result->name);
-
-            $model->update(array_merge($fillable, [
-                'category' => isset($result->category) ? $result->category->name : null,
-                'yields' => json_encode($result->yields),
-            ]));
-            return $model->refresh();
-        }
-
-        Recipe::create(array_merge($fillable, [
-            'recipe_id' => $result->id,
-            'category' => isset($result->category) ? $result->category->name : null
-        ]));
-
-        $recipe = Recipe::where('id', $result->id)->first();
+        /** @var Recipe $recipe */
+        $recipe = Recipe::firstOrCreate(['id' => $result->id], $data);
         $recipe->recipe_id = $result->id;
 
-        $this->info('[+] Creating recipe ' . $recipe->name);
+        $message = $recipe->wasRecentlyCreated  ? '[+] Creating recipe ' : '[-] Updating recipe ';
+        $this->info($message . $recipe->name);
 
         $recipe->wines()->sync($result->wines);
 
@@ -111,14 +94,13 @@ class SyncHelloFresh extends Command
          */
         foreach ($result->steps as $step) {
             /** @var Step $stepModel */
-            $stepModel = $recipe->steps()->create([
+            $stepModel = Step::updateOrCreate(['index' => $step->index, 'recipe_id' => $result->id], [
                 'index' => $step->index,
                 'instructionsMarkdown' => $step->instructionsMarkdown,
                 'instructions' => $step->instructions,
-                'images' => Arr::first($step->images)->link ?? null,
+                'images' => 'https://img.hellofresh.com/f_auto,fl_lossy,q_auto,w_1280/hellofresh_s3'. (Arr::first($step->images)->path ?? '/notfound.png'),
                 'recipe_id' => $result->id,
-            ])->refresh();
-
+            ]);
             $stepModel->utensils()->sync($step->utensils);
         }
 
@@ -127,7 +109,7 @@ class SyncHelloFresh extends Command
          */
         $utensils = [];
         foreach ($result->utensils as $utensil) {
-            $utensils[] = $this->findOrCreate(Utensil::class, $this->fillable($utensil), 'id');
+            $utensils[] = Utensil::updateOrCreate(['id' => $utensil->id], $this->fillable($utensil));
         }
         $recipe->utensils()->sync(array_map(function ($part) { return $part->id; }, $utensils));
 
@@ -136,7 +118,7 @@ class SyncHelloFresh extends Command
          */
         $allergens = [];
         foreach ($result->allergens as $allergen) {
-            $allergens[] = $this->findOrCreate(Allergen::class, $this->fillable($allergen), 'id');
+            $allergens[] = Allergen::updateOrCreate(['id' => $allergen->id], $this->fillable($allergen));
         }
         $recipe->allergens()->sync(array_map(function ($part) { return $part->id; }, $allergens));
 
@@ -146,7 +128,7 @@ class SyncHelloFresh extends Command
         $ingredients = [];
         foreach ($result->ingredients as $ingredient) {
             /** @var Ingredient $ingredientModel */
-            $ingredients[] = $ingredientModel = $this->findOrCreate(Ingredient::class, $this->fillable($ingredient), 'id');
+            $ingredients[] = $ingredientModel = Ingredient::updateOrCreate(['id' => $ingredient->id], $this->fillable($ingredient));
 
             if (!empty($ingredient->family)) {
                 $hasRelation = DB::table('ingredient_families')
@@ -157,7 +139,7 @@ class SyncHelloFresh extends Command
                     ->first();
 
                 if (empty($hasRelation)) {
-                    $family = $this->findOrCreate(Family::class, $this->fillable($ingredient->family), 'id');
+                    $family = Family::updateOrCreate(['id' => $ingredient->family->id], $this->fillable($ingredient->family));
                     $ingredientModel->family()->attach($family);
                 }
             }
@@ -178,7 +160,7 @@ class SyncHelloFresh extends Command
          */
         $cuisines = [];
         foreach ($result->cuisines as $cuisine) {
-            $cuisines[] = $this->findOrCreate(Cuisine::class, $this->fillable($cuisine), 'id');
+            $cuisines[] = Cuisine::updateOrCreate(['id' => $cuisine->id, ], $this->fillable($cuisine));
         }
         $recipe->cuisines()->sync(array_map(function ($part) { return $part->id; }, $cuisines));
     }
@@ -189,19 +171,6 @@ class SyncHelloFresh extends Command
      * @param $field
      * @return Model
      */
-    protected function findOrCreate(string $class, array $fillable, $field): Model
-    {
-        $model = $class::where($field, $fillable[$field])->first();
-
-        if (!empty($model)) {
-            return $model;
-        }
-
-        $class::create($fillable);
-
-        return $class::where($field, $fillable[$field])->first();
-    }
-
     protected function fillable(\stdClass $result): array
     {
         $fillable = Arr::only(json_decode(json_encode($result), true), [

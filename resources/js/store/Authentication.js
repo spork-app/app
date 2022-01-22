@@ -1,3 +1,5 @@
+import SporkApp from "../SporkApp";
+
 export default {
     state: {
         user: null,
@@ -31,6 +33,7 @@ export default {
                 await axios.post('/login', { email, password })
                 commit('setAuthenticated', true);
                 await dispatch('fetchUser');
+                Spork.bootCallbacks();
                 commit('setErrors', null)
             } catch (error) {
                 if (error.response.status === 422) {

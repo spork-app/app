@@ -36,6 +36,9 @@ export default class SporkApp {
         this.router = createRouter({
             history: createWebHistory(),
             routes: [
+                this.unauthenticatedRoute('/login', require('./routes/Auth/Login').default),
+                this.unauthenticatedRoute('/register', require('./routes/Auth/Register').default),
+                this.unauthenticatedRoute('/forgot-password', require('./routes/Auth/ForgotPassword').default),
                 this.authenticatedRoute('/', './routes/Base', {
                     // All routes for Spork, go under the base route.
                     children: [
@@ -43,8 +46,6 @@ export default class SporkApp {
                         this.authenticatedRoute('/:catchAll(.*)', require('./routes/404Error').default),
                     ]
                 }),
-                this.unauthenticatedRoute('/login', require('./routes/Auth/Login').default),
-                this.unauthenticatedRoute('/register', require('./routes/Auth/Register').default),
             ]
         });
 
@@ -53,8 +54,15 @@ export default class SporkApp {
 
         // Setup the store
         this.app.use(this.store);
-    
+
+        await this.bootCallbacks();
+
+        this.app.mount('#app');
+    }
+
+    async bootCallbacks() {
         // Wait for the callbacks to finish (essentially data core to the app, authentication, users, features, etc)
+        // Callbacks should be booted on page load, and after authentication.
         for (let callback of this.callbacks) {
             await callback({
                 app: this.app,
@@ -63,7 +71,6 @@ export default class SporkApp {
             });
         }
 
-        this.app.mount('#app');
     }
 
     component(tag, component) {

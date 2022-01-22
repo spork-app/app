@@ -13,6 +13,9 @@ Route::get('/recipes', function (Request $request) {
         ->inRandomOrder()
         ->paginate(16);
 });
+Route::get('/recipes/{slug}', function (Request $request, $slug) {
+    return \Spork\Food\Models\Recipe::allUsable()->firstWhere('slug', $slug);
+});
 
 Route::post('/search', function (Request $request) {
     if (!$request->hasAny(['query', 'allergies', 'pairs', 'ingredients', 'difficulty', 'prepTime',])) {
@@ -55,7 +58,7 @@ Route::post('/search', function (Request $request) {
         $eloquentQuery->whereHas('ingredients.family', function (Builder $query) use ($request): void {
             $query->whereIn('type', $request->get('ingredients', []));
         });
-    }https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_214,q_auto,w_381/hellofresh_s3/image/61a928dee220e51bc5740b15-dda29365.jpg
+    }
 
     return $eloquentQuery->paginate(16);
 });

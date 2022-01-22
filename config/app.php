@@ -180,7 +180,8 @@ return [
         Spork\Maintenance\MaintenanceServiceProvider::class,
         Spork\Planning\PlanningServiceProvider::class,
         Spork\Research\ResearchServiceProvider::class,
-        Spork\Shopping\ShoppingServiceProvider::class,
+        // Shopping needs to be refactored, the current service (meijer) isn't fully supported
+        // Spork\Shopping\ShoppingServiceProvider::class,
         Spork\Greenhouse\PlantServiceProvider::class,
         Spork\Food\FoodServiceProvider::class,
    

@@ -91,8 +91,10 @@
         <button v-if="display_background" class="fixed w-full h-full bg-gray-800 opacity-25 top-0 left-0 right-0 bottom-0" @click="display_background = false"></button>
         <!-- ./Columns -->
     </div>
-    <div v-else class="p-4 rounded-lg bg-white text-lg m-4 container mx-auto">
-        Loading...
+    <div v-else class="container mx-auto">
+        <div class="p-4 rounded-lg bg-white dark:bg-gray-600 text-lg m-4 shadow">
+            Loading...
+        </div>
     </div>
 </template>
 

@@ -57,7 +57,8 @@
                                 Finance Account (Link)
                             </label>
                             <div class="mt-2">
-                                <select v-model="link_id" class="block max-w-lg w-full shadow-sm bg-white dark:bg-gray-600 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 rounded-md">
+                                <select v-model="link_id" class="placeholder-gray-400 block max-w-lg w-full shadow-sm bg-white dark:bg-gray-500 dark:border-gray-500 focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 rounded-md">
+                                    <option :value="null" disabled="true">Select a bank link</option>
                                     <option v-for="account in $store.getters.features.finance" :key="account.account_id" :value="account.id">{{ account.name }}</option>
                                 </select>
                             </div>
@@ -96,8 +97,9 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" for="account_selector">
                             Account associated with these transactions
                         </label>
-                        <select v-model="account_id" id="account_selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <select v-model="account_id" id="account_selector" class="placeholder-gray-400 mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                             <optgroup v-for="token in $store.getters.features?.finance" :label="token.name">
+                                <option :value="null" disabled="true">Select an account</option>
                                 <option v-for="account in token.accounts" :key="account.id" :value="account.account_id">{{ account.name }} &mdash; {{account?.feature?.name}}</option>
                             </optgroup>
                          </select>

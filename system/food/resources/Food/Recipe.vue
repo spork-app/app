@@ -4,14 +4,14 @@
 
 <template>
     <div class="w-full lg:w-1/3">
-        <div class="mx-2 my-4 rounded overflow-hidden shadow bg-white">
+        <div class="mx-2 my-4 rounded overflow-hidden shadow bg-white dark:bg-gray-600">
             <img class="w-full" :src="recipe.imageLink.endsWith('.jpg') ? recipe.imageLink : recipe.imageLink + 'jpg'" alt="Sunset in the mountains">
             <div class="px-6 py-4">
                 <div class="font-bold text-xl mb-2">
-                    <a :href="'/food/recipes/' + recipe.slug">{{ recipe.name }}</a>
+                    <router-link :to="'/food/recipes/' + recipe.slug">{{ recipe.name }}</router-link>
                     <div class="text-sm">{{ recipe.headline }}</div>
                 </div>
-                <p class="text-gray-600 text-base max-h-28 truncate ">
+                <p class="text-gray-600 dark:text-gray-300 text-base min-h-28">
                     {{ recipe.description }}
                 </p>
             </div>

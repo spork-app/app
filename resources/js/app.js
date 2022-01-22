@@ -19,7 +19,6 @@ Spork.setupStore({
     ActivityLog: require('./store/ActivityLog').default,
 })
 
-
 Spork.build(async ({ store, router }) => {
     await axios.get('/sanctum/csrf-cookie');
     await store.dispatch('fetchUser');
@@ -46,7 +45,9 @@ require('@system/calendar/resources/app');
 require('@system/maintenance/resources/app');
 require('@system/planning/resources/app');
 require('@system/research/resources/app');
-require('@system/shopping/resources/app');
+
+// Shopping needs to be refactored, the current service (meijer) isn't fully supported
+// require('@system/shopping/resources/app');
 require('@system/greenhouse/resources/app');
 require('@system/food/resources/app');
 

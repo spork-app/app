@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 
         <script>
@@ -49,6 +49,6 @@
            <router-view></router-view>
         </div>
 
-        <script src="{{ mix('js/app.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

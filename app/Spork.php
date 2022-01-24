@@ -21,7 +21,8 @@ class Spork
         self::$features[Str::slug($featureName)] = [
             'name' => Str::title($featureName),
             'icon' => $icon,
-            'path' => $path
+            'path' => $path,
+            'enabled' => config('spork.'.Str::slug($featureName).'.enabled', false),
         ];
     }
 
@@ -75,5 +76,12 @@ class Spork
         );
 
         return static::$actions;
+    }
+
+    public static function hasFeature(string $featureName)
+    {
+        $slug = Str::slug($featureName);
+
+        return isset(self::$features[$slug]) && self::$features[$slug]['enabled'];
     }
 }

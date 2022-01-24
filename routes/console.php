@@ -1,7 +1,6 @@
 <?php
 
-use aalfiann\MyAnimeList;
-use App\Core\Models\FeatureList;
+use App\Models\FeatureList;
 use App\Finance\Contracts\Services\PlaidServiceContract;
 use Carbon\Carbon;
 use Faker\Generator;
@@ -10,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Artisan;
+use Spork\Finance\Events\AccountUpdateRequested;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +21,7 @@ use Illuminate\Support\Facades\Artisan;
 | simple approach to interacting with each command's IO methods.
 |
 */
+
+Artisan::command('test', function () {
+    event(new AccountUpdateRequested(FeatureList::find(2)));
+});

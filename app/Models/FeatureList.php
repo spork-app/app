@@ -66,6 +66,17 @@ class FeatureList extends Model implements AbstractEloquentModel
                 $item->user_id = auth()->id();
             }
         });
+
+        static::addGlobalScope('user', function (Builder $builder) {
+            if (!auth()->check()) {
+                return;
+            }
+
+            $builder->where('user_id', auth()->id())
+                ->orWhereHas('users', function (Builder $builder) {
+                    $builder->where('user_id', auth()->id());
+                });
+        });
     }
 
     public function user()

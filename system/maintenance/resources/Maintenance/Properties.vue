@@ -26,11 +26,11 @@
                     <div class="grid grid-cols-6 gap-6 mt-2">
                         <div class="col-span-6">
                             <label for="name" class="block text-sm font-medium">Name</label>
-                            <input type="text" name="name" id="name" class="mt-1 py-2 px-4 border focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                            <spork-input type="text" name="name" id="name" />
                         </div>
                         <div class="col-span-6">
                             <label for="street-address" class="block text-sm font-medium">Street address</label>
-                            <input type="text" name="state" id="state" class="mt-1 py-2 px-4 border focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                            <spork-input type="text" name="state" id="state" />
                         </div>
 
                         <div class="font-bold uppercase col-span-6 text-xs text-gray-600 dark:text-gray-50 tracking-wide">calendar integration</div>

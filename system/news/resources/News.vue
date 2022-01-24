@@ -1,9 +1,11 @@
 <template>
     <div  class="flex flex-wrap justify-center p-4 w-full h-screen overflow-y-scroll">
-        <div class="flow-root w-full">  
-            <div>
-                <select name="category" id="category">
-                    <option value=""></option>
+        <div class="w-full flex flex-col gap-4">  
+            <div class="flex flex-wrap justify-between">
+                <div class="dark:text-gray-100 text-gray-700 font-bold text-3xl">Recent Headlines</div>
+
+                <select @change="changeCategory" name="category" id="category" class="text-gray-600 bg-white py-1 px-2 rounded dark:bg-gray-600 dark:text-gray-100">
+                    <option value="">All Categories</option>
                     <option value="business">Business</option>
                     <option value="entertainment">Entertainment</option>
                     <option value="general">General</option>
@@ -13,28 +15,6 @@
                     <option value="technology">Technology</option>
                 </select>
             </div>
-            <!-- <ul role="list" class="divide-y divide-gray-200">
-                <li v-for="message in $store.getters.articles" :key="message.id" class="relative bg-white py-5 px-4 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                <div class="flex justify-between space-x-3">
-                    <div class="min-w-0 flex-1">
-                    <div href="#" class="block focus:outline-none">
-                        <span class="absolute inset-0" aria-hidden="true" />
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ message.title }}</p>
-                        <p class="text-sm text-gray-500 truncate">{{ message?.source?.name }}</p>
-                    </div>
-                    </div>
-                    <time :datetime="message.datetime" class="flex-shrink-0 whitespace-nowrap text-sm text-gray-500">{{ dayjs(message.publishedAt).from(dayjs()) }}</time>
-                </div>
-                <div class="mt-1">
-                    <p class="line-clamp-2 text-sm text-gray-600">
-                    {{ message.description }}
-                    </p>
-                    <button @click="() => markAsRead(event)" class="text-red-500 hover:text-red-700 font-bold rounded text-xs mt-2 focus:border-red-500 focus:border">
-                        Marked as read
-                    </button> 
-                </div>
-                </li>
-            </ul> -->
             <div role="list" class="w-full grid grid-cols-3 gap-4 ">
                 <div v-for="(event, eventIdx) in $store.getters.articles" :key="eventIdx">
                     <div class="rounded overflow-hidden shadow bg-white dark:bg-gray-600">
@@ -74,7 +54,8 @@ export default {
     name: "News",
     data() {
         return {
-            dayjs
+            dayjs,
+            category: '',
         }
     },
 
@@ -89,6 +70,9 @@ export default {
         },
         getNews() {
             this.$store.dispatch('getArticles')
+        },
+        changeCategory(e) {
+            this.$store.dispatch('getArticles', { category: e.target.value})
         }
     },
 

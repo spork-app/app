@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', fn () => auth()->user())->middleware(['api', 'auth:sanctum']);
+Route::middleware(['api', 'auth:sanctum'])->get('/user', fn () => auth()->user());
 
 Route::middleware(['api', 'auth:sanctum'])->get('weather', function (\Spork\Weather\Contracts\Services\WeatherServiceContract $weatherService) {
     $propertu = \App\Core\Models\Property::first();
@@ -24,6 +24,6 @@ Route::middleware(['api', 'auth:sanctum'])->get('weather', function (\Spork\Weat
     return $weatherService->query($propertu->address);
 });
 Route::middleware(['api', 'auth:sanctum'])->get('news', function (\Spork\News\Contracts\Service\NewsServiceContract $service) {
-    return $service->headlines('');
+    return $service->headlines('', request()->get('category', null));
 });
 

@@ -35,10 +35,10 @@
 
 <template>
     <div class="w-full relative">
-        <div class="w-full mx-auto row justify-content-center sticky shadow-lg top-0">
+        <div class="w-full mx-auto row justify-content-center shadow-lg top-0">
             <div class="flex flex-wrap w-full">
                 <div class="bg-white dark:bg-gray-600 w-full mx-2">
-                    <input v-model="search.query" type="text" @keyup.enter="searchQuery" class="placeholder-gray-300 w-full p-3 border-b border-gray-200 dark:border-gray-500 dark:bg-gray-500 text-grey-800 focus:outline-none" placeholder="Search for things...">
+                    <input v-model="search.query" type="text" @keyup.enter="searchQuery" class="sticky placeholder-gray-300 w-full p-3 border-b border-gray-200 dark:border-gray-500 dark:bg-gray-500 text-grey-800 focus:outline-none" placeholder="Search for things...">
                     <div class="flex flex-wrap">
                         <div class="w-full md:flex-1">
                             <div class="font-bold p-3 w-full">Avoid Allergens...</div>

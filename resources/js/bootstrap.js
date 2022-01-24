@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import CalendarEvent from './CalendarEvent'
 import { buildUrl } from '@kbco/query-builder';
+import Echo from 'laravel-echo';
 
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/localizedFormat'));
@@ -63,13 +64,11 @@ window.createArray = (items) => {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo';
+window.Pusher = require('pusher-js');
 
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true
+});

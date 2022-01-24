@@ -55,37 +55,42 @@ class NewsService implements NewsServiceContract
             'apiKey' => env('NEWS_API_KEY'),
             'from' => now()->startOfWeek()->startOfDay(),
             'to' => now()->endOfWeek()->endOfDay(),
-            'sources' => implode(',', [
-                'bbc-news',
-                'business-insider',
-                'daily-mail',
-                'engadget',
-                'entertainment-weekly',
-                'financial-times',
-                'fortune',
-                'google-news',
-                'hacker-news',
-                'ign',
-                'mashable',
-                'medical-news-today',
-                'national-geographic',
-                'new-york-magazine',
-                'polygon',
-                'recode',
-                'reuters',
-                'the-huffington-post',
-                'the-new-york-times',
-                'the-verge',
-                'the-wall-street-journal',
-                'the-washington-post',
-                'the-washington-times',
-            ]),
             'language' => 'en',
             'sortBy' => 'publishedAt',
             'pageSize' => 100,
         ], !empty($query) ? [
             'q' => $query,
-        ] : []));
+        ] : [],
+            !empty($category) ? [
+                'category' => $category
+            ] : [
+                'sources' => implode(',', [
+                    'bbc-news',
+                    'business-insider',
+                    'daily-mail',
+                    'engadget',
+                    'entertainment-weekly',
+                    'financial-times',
+                    'fortune',
+                    'google-news',
+                    'hacker-news',
+                    'ign',
+                    'mashable',
+                    'medical-news-today',
+                    'national-geographic',
+                    'new-york-magazine',
+                    'polygon',
+                    'recode',
+                    'reuters',
+                    'the-huffington-post',
+                    'the-new-york-times',
+                    'the-verge',
+                    'the-wall-street-journal',
+                    'the-washington-post',
+                    'the-washington-times',
+                ])
+            ]
+        ));
     }
 
     protected function request(string $endpoint = 'everything', array $options = [])

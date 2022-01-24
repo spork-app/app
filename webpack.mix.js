@@ -29,7 +29,7 @@ mix
                 '@system': path.resolve(__dirname, 'system'),
             }
         }
-    })
+    })    
     .vue()
     .js([
         'resources/js/app.js',

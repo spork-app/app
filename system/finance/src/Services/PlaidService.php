@@ -6,6 +6,7 @@ use App\Models\FeatureList;
 use Spork\Finance\Contracts\Services\PlaidServiceContract;
 use Spork\Finance\Models\Account;
 use Carbon\Carbon;
+use Spork\Finance\Events\AccountsUpdateEvent;
 use TomorrowIdeas\Plaid\Entities\User;
 use TomorrowIdeas\Plaid\Plaid;
 
@@ -43,8 +44,8 @@ class PlaidService implements PlaidServiceContract
         );
 
         $accounts = [];
-
         foreach ($transactions->accounts as $account) {
+
             $acct = $token->accounts()->where('account_id', $account->account_id)->first();
 
             if (empty($acct)) {
@@ -59,7 +60,7 @@ class PlaidService implements PlaidServiceContract
                 ]);
                 $accounts[$acct->account_id] = $acct;
             } else {
-                $accounts[$acct->account_id] = $acct->update([
+                $acct->update([
                     'name' => $account->name,
                     'type' => $account->type,
                     'subtype' => $account->subtype,
@@ -67,10 +68,11 @@ class PlaidService implements PlaidServiceContract
                     'available' => $account->balances->available,
                     'mask' => $account->mask,
                 ]);
+                $accounts[$acct->account_id] = $acct->refresh();
             }
         }
 
-        return array_map(function ($transaction) use ($accounts) {
+        $updatedTransactions = array_map(function ($transaction) use ($accounts) {
             /** @var Account $account */
             $account = $accounts[$transaction->account_id];
 
@@ -100,6 +102,8 @@ class PlaidService implements PlaidServiceContract
 
             return $localTransaction;
         }, $transactions->transactions);
+
+        return $updatedTransactions;
     }
 
     public function getAccounts(FeatureList $accessToken): array

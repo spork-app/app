@@ -12,6 +12,7 @@ window.Spork = new SporkApp(app);
 Spork.component('crud-view', require('./components/CrudView').default);
 Spork.component('feature-required', require('./components/FeatureRequired').default);
 Spork.component('dual-menu-panel', require('./components/DualMenuPanel').default);
+Spork.component('spork-input', require('./components/SporkInput').default);
 
 Spork.setupStore({
     Authentication: require('./store/Authentication').default,
@@ -36,6 +37,8 @@ Spork.build(async ({ store, router }) => {
         },
         include: 'causer,subject',
     })
+    Echo.private(`user.${store.getters.user.id}`).listen('FeatureCreated', console.log)
+
 });
 
 

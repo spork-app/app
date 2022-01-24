@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-5 w-64" :style="showDatepicker ?'height: 340px' : 'height: 3rem;'">
+    <div class="mb-5 w-64 text-gray-800 dark:text-gray-100" :style="showDatepicker ?'height: 340px' : 'height: 3rem;'">
 
         <label class="font-medium uppercase text-sm mb-1 block">{{label || 'Select a date'}}</label>
         <div class="relative">
@@ -9,7 +9,7 @@
                     readonly
                     v-model="datepickerValue"
                     @keydown.escape="() => showDatepicker = false"
-                    class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline font-medium"
+                    class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline font-medium dark:bg-gray-500"
                     placeholder="Select date"
                     style="width: 17rem;"
                 >
@@ -22,7 +22,7 @@
             </div>
 
             <div
-                class="mt-12 rounded-lg shadow p-4 absolute top-0 left-0"
+                class="mt-12 rounded-lg shadow p-4 absolute top-0 left-0 bg-gray-50 dark:bg-gray-500"
                 style="width: 17rem"
                 v-show="showDatepicker">
 
@@ -73,7 +73,7 @@
                             <div
                                 @click="getDateValue(date)"
                                 v-text="date"
-                                class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 target:bg-gray-100 hover:bg-gray-100"
+                                class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 target:bg-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
                                 :class="{
                                     'underline': isToday(date) === true,
                                     'border-blue-500 border text-blue-600': isSelected(date) === true,

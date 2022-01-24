@@ -16,9 +16,9 @@ use Laravel\Telescope\Avatar;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(RedirectIfAuthenticated::class)->get('/login', fn() => view('welcome'));
-Route::middleware(RedirectIfAuthenticated::class)->get('/register', fn() => view('welcome'));
-Route::middleware(RedirectIfAuthenticated::class)->get('/forget-password', fn() => view('welcome'));
+Route::middleware(['web', RedirectIfAuthenticated::class])->get('/login', fn() => view('welcome'));
+Route::middleware(['web', RedirectIfAuthenticated::class])->get('/register', fn() => view('welcome'));
+Route::middleware(['web', RedirectIfAuthenticated::class])->get('/forget-password', fn() => view('welcome'));
 
 Route::get('/{uri?}/{subPath?}', fn() => view('welcome'))
     ->middleware('auth:sanctum')

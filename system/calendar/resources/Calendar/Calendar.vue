@@ -1,14 +1,11 @@
 <template>
     <div class="flex flex-wrap flex-grow w-full h-full">
         <div style="width: 300px;" class="px-2 bg-white dark:bg-gray-700 h-full flex flex-col justify-between w-full">
-            <div>
+            <div class="mt-2">
                 <div class="w-full flex flex-wrap justify-between items-center">
-                    <button class="my-2 py-1 px-3 bg-blue-500 dark:bg-blue-600 rounded-lg text-white">
-                        + Create
-                    </button>
-
+                    <feature-required feature="calendar" :allow-more-than-one="true"></feature-required>
                     <div>
-                        <select :value="$store.getters.calendarOptions.type" @change="changeType" class="rounded border-gray-200 dark:border-gray-500 dark:text-gray-100 dark:bg-gray-600">
+                        <select :value="$store.getters.calendarOptions.type" @change="changeType" class="py-1 px-2 rounded border-gray-200 dark:border-gray-500 dark:text-gray-100 dark:bg-gray-600">
                             <option value="month">Month</option>
                             <option value="week">Week</option>
                             <option value="4days">4 Days</option>
@@ -39,7 +36,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col flex-1 border-l">
+        <div class="flex flex-col flex-1 border-l dark:border-gray-600 border-gray-200">
             <master-calendar :calendars="$store.getters.calendars">
                 <div slot="events" slot-scope="{ events }">
                     <pre>{{ events }}</pre>

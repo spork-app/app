@@ -9,6 +9,7 @@ class TaskController
     public function statuses() {
         return \Spatie\QueryBuilder\QueryBuilder::for(\Spork\Planning\Models\Status::class)
         ->allowedIncludes(['users', 'tasks', 'tasks.creator','tasks.assignee'])
+        ->where('user_id', auth()->id())
         ->get();
     }
 

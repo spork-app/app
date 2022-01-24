@@ -10,11 +10,12 @@ export default {
         readArticles: state => state.readArticles.map,
     },
     actions: {
-        getArticles({state, commit}) {
+        getArticles({state, commit}, options) {
+            const category = options?.category;
             // Filter out articles that were read more than 4 days ago.
             state.readArticles = (JSON.parse(localStorage.getItem('readArticles')) ?? []).filter(({ date }) => dayjs(date).isAfter(dayjs().subtract(4, 'days')));
             
-            axios.get('/api/news')
+            axios.get(buildUrl('/api/news', { category: category ? category : null }))
                 .then(response => {
                     commit('setArticles', response.data);
                 })

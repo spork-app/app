@@ -9,15 +9,15 @@
                     <div class="text-gray-600 dark:text-gray-300">{{account.name}}</div>
 
                     <div class="flex flex-col my-8 ">
-                        <div class="text-3xl font-medium text-gray-900" v-if="typeof account.available === 'number'">
+                        <div class="text-3xl font-medium text-gray-900 dark:text-gray-100">
                             ${{account?.available?.toFixed(2)?.toLocaleString() ?? 0}}
-                            <span class="text-base font-base">/ {{account?.balance?.toFixed(2)?.toLocaleString()}}</span>
+                            <span class="text-base font-base">/ {{account?.balance?.toFixed(2)}}</span>
                         </div>
                         <div class="text-sm font-thin">available / balance</div>
                     </div>
 
                     <div class="w-full flex flex-wrap">
-                        <time :datetime="account.updated_at" class="text-gray-500 text-sm">{{ dayjs(account.updated_at).format('lll') }}</time>
+                        <time :datetime="account.updated_at" class="text-gray-500 dark:text-gray-400 text-sm">{{ dayjs(account.updated_at).format('lll') }}</time>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             <div class="font-medium text-lg">
                                 {{ transaction.name }}
                             </div>
-                            <div class="text-sm text-gray-500">
+                            <div class="text-sm text-gray-500  dark:text-gray-400">
                                 {{ transaction.date }} - {{ transaction?.account?.name }}
                             </div>
                         </div>

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\FeatureList;
 use Spork\Finance\Contracts\Services\PlaidServiceContract;
+use Spork\Finance\Events\BankLinkedEvent;
 use Spork\Finance\Models\Account;
 
 Route::middleware('auth:sanctum')->post('upload-accounts', function (Request $request) {
@@ -149,7 +150,7 @@ Route::middleware('auth:sanctum')->post('/plaid/exchange-token', function(PlaidS
             'item_id' => $response->item_id,
             'institution_id' => request()->get('institution'),
         ]
-    ]);
+    ]);    
 });
 
 Route::post('plaid/webhook', fn () => info(request()->all()));

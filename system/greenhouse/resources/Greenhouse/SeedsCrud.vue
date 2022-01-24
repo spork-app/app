@@ -26,18 +26,18 @@
                 <div class="flex flex-col gap-4 mt-2">
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6">
-                            <label for="seed_name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input v-model="form.name" type="text" name="seed_name" id="seed_name" class="mt-1 py-2 px-4 border focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                            <label for="seed_name" class="block max-w-lg text-sm font-medium text-gray-700 dark:text-gray-200">Name</label>
+                            <spork-input v-model="form.name" type="text" name="seed_name" id="seed_name" />
                         </div>
                     </div>
 
                     <div class="my-4">
                         <div class="text-left">
-                            <label class="block text-sm font-medium text-gray-700" for="plantselector">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" for="plantselector">
                                 Parent Plant
                             </label>
                             <div class="mt-2">
-                                <select v-model="form.plant_id" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+                                <select v-model="form.plant_id" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 dark:border-gray-500 dark:bg-gray-500 rounded-md ">
                                     <option v-for="plant in $store.getters.plants" :key="plant.id" :value="plant.id">{{ plant.name }}</option>
                                 </select>
                             </div>

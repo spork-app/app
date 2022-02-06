@@ -26,7 +26,7 @@ class CalendarServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
-        ], 'migrations');
+        ], 'calendar-migrations');
 
         Spork::addFeature('calendar', 'CalendarIcon', '/calendar');
     }

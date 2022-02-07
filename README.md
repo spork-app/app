@@ -1,2 +1,2 @@
 # What is this project?
-This is Spork. A multipurpose megatool. I make no claims as to what it can help with, but I use it to help keep track of my finances, my car maintenance, property, planning, local shopping, my greenhouse, and research.
+This is Spork. A multipurpose megatool that exposes a certain kind of workflow to enable quickly putting together the UI and API of a project.

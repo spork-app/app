@@ -112,5 +112,41 @@ export default class SporkApp {
 
     toast(message, type = 'success') {
         this.app.$toast[type](message);
+        if (type === 'success') { 
+            this.sound('finished')
+        }
+
+        if (type === 'error') { 
+            this.sound('error')
+        }
+    }
+
+    getLocalStorage(key, defaultValue) {
+        return JSON.parse(localStorage.getItem(key)) || defaultValue;
+    }
+
+    setLocalStorage(key, value){
+        localStorage.setItem(key, JSON.stringify(value));
+
+        return value;
+    }
+
+    setBasePath(basePath) {
+        this.base_path = basePath;
+    }
+
+    basePath(relativePath) {
+        return this.base_path + '/' + relativePath;
+    }
+
+    sound(name) {
+        // glitch-sound
+        // error-sound
+        // success-sound
+        // notification-sound
+        const v = document.getElementById(name+'-sound');
+
+        console.log('soudn', v, name);
+        v.play();
     }
 }

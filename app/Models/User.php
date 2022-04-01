@@ -53,29 +53,31 @@ class User extends Authenticatable implements MustVerifyEmail
         self::creating(function (User $user) {
             $user->profile_photo = 'https://www.gravatar.com/avatar/'.md5(Str::lower($user->email)).'?s=200';
         });
+    }
+    
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'user.'.$this->id;
+    }
 
-        self::created(function ($user) {
-            $user->statuses()->create([
-                'title' => 'To Do',
-                'slug' => 'to-do',
-                'order' => 1,
-            ]);
-            $user->statuses()->create([
-                'title' => 'Working On/In Progress',
-                'slug' => 'in-progress',
-                'order' => 2,
-            ]);
-            $user->statuses()->create([
-                'title' => 'Done',
-                'slug' => 'done',
-                'order' => 5,
-            ]);
-            $user->statuses()->create([
-                'title' => 'Ideas',
-                'slug' => 'ideas',
-                'order' => 0,
-            ]);
+    public function updateProfilePhoto($photo)
+    {
+        tap($this->profile_photo_path, function ($previous) use ($photo) {
+            $this->forceFill([
+                'profile_photo' => $photo->storePublicly(
+                    'profile-photos', ['disk' => $this->profilePhotoDisk()]
+                ),
+            ])->save();
+
+            if ($previous) {
+                \Storage::disk($this->profilePhotoDisk())->delete($previous);
+            }
         });
+    }
+
+    protected function profilePhotoDisk()
+    {
+        return 'public';
     }
 
     public function tasks()

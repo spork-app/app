@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Events\FeatureCreated;
+use App\Events\FeatureDeleted;
+use App\Events\FeatureUpdated;
 use Spork\Calendar\Traits\Repeatable;
 use Spork\Finance\Models\Account;
 use Spork\Maintenance\Traits\Workable;
@@ -10,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Kregel\LaravelAbstract\AbstractEloquentModel;
 use Kregel\LaravelAbstract\AbstractModelTrait;
 use Spatie\Tags\HasTags;
@@ -32,6 +36,8 @@ class FeatureList extends Model implements AbstractEloquentModel
     public const FEATURE_WEATHER = 'weather';
     public const FEATURE_PROPERTY = 'property';
     public const FEATURE_CALENDAR = 'calendar';
+    public const FEATURE_DEVELOPMENT = 'development';
+    public const FEATURE_GARAGE = 'garage';
 
     public const ALL = [
         self::FEATURE_RESEARCH,
@@ -43,6 +49,8 @@ class FeatureList extends Model implements AbstractEloquentModel
         self::FEATURE_WEATHER,
         self::FEATURE_PROPERTY,
         self::FEATURE_CALENDAR,
+        self::FEATURE_DEVELOPMENT,
+        self::FEATURE_GARAGE,
     ];
 
     protected $fillable = [
@@ -50,6 +58,8 @@ class FeatureList extends Model implements AbstractEloquentModel
         'feature',
         'settings',
     ];
+
+    protected $appends = ['slug'];
 
     protected $casts = [
         'settings' => 'json',
@@ -65,6 +75,18 @@ class FeatureList extends Model implements AbstractEloquentModel
             if (auth()->check()) {
                 $item->user_id = auth()->id();
             }
+        });
+
+        static::created(function ($item) {
+            event(new FeatureCreated($item));
+        });
+
+        static::updated(function ($item) {
+            event(new FeatureUpdated($item));
+        });
+
+        static::deleted(function ($item) {
+            event(new FeatureDeleted($item));
         });
 
         static::addGlobalScope('user', function (Builder $builder) {
@@ -153,5 +175,10 @@ class FeatureList extends Model implements AbstractEloquentModel
     public function getAbstractSearchableFields(): array
     {
         return [];
+    }
+
+    public function getSlugAttribute(): string
+    {
+        return Str::slug($this->name);
     }
 }

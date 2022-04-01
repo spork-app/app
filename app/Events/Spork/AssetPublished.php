@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Spork;
 
-use App\Models\FeatureList;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class FeatureDeleted
+class AssetPublished
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,7 +19,7 @@ class FeatureDeleted
      *
      * @return void
      */
-    public function __construct(public FeatureList $featureList)
+    public function __construct(public string $feature, public string $asset)
     {
         //
     }
@@ -32,6 +31,6 @@ class FeatureDeleted
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.'.auth()->id());
+        return new PrivateChannel('channel-name');
     }
 }

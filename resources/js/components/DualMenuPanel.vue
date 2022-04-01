@@ -1,13 +1,16 @@
 <template>
     <div class="flex w-full min-h-full text-gray-600 dark:text-gray-200">
-        <div style="max-width: 300px;" class="w-14 overflow-hidden xl:w-64 px-2 bg-white dark:bg-gray-700 min-h-full flex flex-col border-r border-gray-200 dark:border-gray-400">
-            <router-link :to="redirect" class="text-lg py-6 ">{{ name }}</router-link>
+        <div style="max-width: 320px;" class="max-h-screen w-full overflow-y-scroll space-y-2 px-2 bg-white dark:bg-gray-700 flex flex-col border-r border-gray-200 dark:border-gray-500 scrollbar scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-slate-500">
+            <slot name="header">
+                <router-link :to="redirect" class="text-lg py-6 ">{{ name }}</router-link>
+            </slot>
+
             <div class="relative mt-3">
-                <input :value="$store.getters.searchQuery" @keyup="(value) => debounce(() => $store.commit('query', value.target.value))" type="text" class="w-full bg-gray-100 border dark:bg-gray-800 border-gray-200 dark:border-gray-600 dark:text-gray-100 rounded-lg py-2 pr-4 pl-5 xl:pl-10" placeholder="Bananas">
+                <input :value="$store.getters.searchQuery" @keyup="(value) => debounce(() => search(value.target.value))" type="text" class="w-full bg-gray-100 border dark:bg-gray-800 border-gray-200 dark:border-gray-600 dark:text-gray-100 rounded-lg py-2 pr-4 pl-5 xl:pl-10" placeholder="Search ...">
                 <svg class="absolute top-0 mt-2 ml-2 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
 
-            <div class="space-y-1 mt-2">
+            <slot name="routes" class="space-y-1 mt-2">
                 <template v-for="item in routes" :key="item.name">
                     <div v-if="!item.children">
                         <router-link :to="item.href" :class="[item.current ? 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200' : 'hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200', 'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md text-left']">
@@ -35,18 +38,12 @@
                         </DisclosurePanel>
                     </Disclosure>
                 </template>
-            </div>
+            </slot>
 
-            <div class="border border-gray-100 w-full mt-4"></div>
-<!--            <div class="flex flex-col xl:block hidden gap-4 mt-4 text-base text-gray-800 pl-10">-->
-<!--                <div class="uppercase text-xs font-bold text-gray-600">Stores</div>-->
-<!--                <div>-->
-<!--                    Meijer-->
-<!--                </div>-->
-<!--            </div>-->
+            <slot name="sideNavFooter"></slot>
         </div>
 
-        <div class="flex flex-col w-full">
+        <div class="flex flex-col flex-1" style="max-width: calc(100% - 320px);">
             <router-view></router-view>
         </div>
     </div>
@@ -69,7 +66,7 @@ const mapCurrentRoute = (fullPath, item) => {
 export default {
     components: { Disclosure, DisclosureButton, DisclosurePanel },
     name: "DualMenuPanel",
-    props: ['name', 'redirect', 'navigation', 'storeQueryAction'],
+    props: ['name', 'redirect', 'navigation', 'storeQueryAction', 'search'],
     watch: {
         '$store.getters.searchQuery'(newVal, oldVal) {
             this.$store.dispatch(this.storeQueryAction)

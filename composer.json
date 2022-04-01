@@ -8,7 +8,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
+        "beyondcode/laravel-websockets": "2.0.0-beta.36",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.10",
@@ -20,17 +21,18 @@
         "laravel/horizon": "^5.7",
         "laravel/sanctum": "^2.13",
         "laravel/scout": "^9.4",
-        "laravel/telescope": "^4.5",
         "laravel/tinker": "^2.5",
         "meilisearch/meilisearch-php": "^0.18.3",
+        "nette/php-generator": "^3.6",
         "predis/predis": "^1.1",
-        "pusher/pusher-php-server": "^7.0",
+        "pusher/pusher-php-server": "^5.0",
         "rlanvin/php-rrule": "^2.2",
         "spatie/laravel-activitylog": "^4.3",
-        "spatie/laravel-query-builder": "^3.4",
+        "spatie/laravel-query-builder": "4.0.2",
         "spatie/laravel-tags": "^4.0",
         "spork/analytics": "dev-main",
         "spork/calendar": "dev-main",
+        "spork/development": "dev-main",
         "spork/finance": "dev-main",
         "spork/food": "dev-main",
         "spork/greenhouse": "dev-main",
@@ -40,6 +42,7 @@
         "spork/research": "dev-main",
         "spork/shopping": "dev-main",
         "spork/weather": "dev-main",
+        "spork/wiretap": "dev-main",
         "staudenmeir/belongs-to-through": "^2.5",
         "tomorrow-ideas/plaid-sdk-php": "^1.0",
         "tray-labs/laravel-influxdb": "^1.0"
@@ -48,6 +51,7 @@
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
+        "laravel/telescope": "^4.7",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
@@ -83,7 +87,7 @@
     },
     "config": {
         "optimize-autoloader": true,
-        "preferred-install": "dist",
+        "preferred-install": "auto",
         "sort-packages": true
     },
     "repositories": [
@@ -94,6 +98,10 @@
         {
             "type": "path",
             "url": "./system/calendar"
+        },
+        {
+            "type": "path",
+            "url": "./system/development"
         },
         {
             "type": "path",
@@ -130,6 +138,10 @@
         {
             "type": "path",
             "url": "./system/weather"
+        },
+        {
+            "type": "path",
+            "url": "./system/wiretap"
         }
     ],
     "minimum-stability": "dev",

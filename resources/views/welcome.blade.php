@@ -8,21 +8,14 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
         <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 
         <script>
             @php 
-            $features = array_map(fn($feature ) => [ 
-                'name' => $feature['name'], 
-                'icon' => $feature['icon'],
-                'path' => $feature['path'],
-                'slug' => Str::slug($feature['name']),
-             ], App\Spork::$features);
-
             $actions = array_map(fn($action ) => $action, App\Spork::$actions);
             @endphp
-            window.Features = @json($features);
+            window.Features = @json(App\Spork::$features);
             window.Actions = @json($actions);
         </script>
         @foreach (App\Spork::publish('css') as $asset)
@@ -32,23 +25,13 @@
     </head>
     <body class="antialiased h-full text-gray-900">
         <div id="app" class="h-full">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 underline">Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
            <router-view></router-view>
         </div>
 
-        <script src="{{ asset('js/app.js') }}"></script>
+        @auth
+        <div id="data" data-env="{{ json_encode($_ENV) }}"></div>
+        @endauth
+
+        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

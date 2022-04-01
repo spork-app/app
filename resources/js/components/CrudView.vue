@@ -2,13 +2,13 @@
     <div class="w-full mt-4 ">
         <div class="mx-4">
             <div class="container mx-auto">
-                <div class="flex flex-wrap ">
+                <div class="flex flex-wrap shadow">
                     <div class="text-4xl font-medium text-blue-900 dark:text-slate-200">
                         {{ title }}
                     </div>
 
                     <div class="w-full mt-4 flex flex-wrap items-center justify-between">
-                        <div class="relative flex-1 max-w-2xl text-gray-700 dark:text-gray-300 items-center">
+                        <div class="relative flex flex-1 max-w-2xl text-gray-700 dark:text-gray-300 items-center">
                             <input type="text" class="bg-white dark:bg-gray-600 w-full pl-12 py-2 rounded-full border-gray-300 placeholder-gray-400 dark:border-gray-600 min-w-4xl" placeholder="Search..." />
                             <div class="absolute top-0 left-0 ml-3 mt-2">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -21,11 +21,9 @@
                         </div>
                     </div>
 
-                    <div class="w-full bg-white dark:bg-gray-600 shadow rounded-lg mt-4 flex flex-wrap items-center justify-between">
+                    <div class="w-full bg-white dark:bg-gray-700  rounded-lg mt-4 flex flex-wrap items-center justify-between">
                         <div class="bg-gray-600 dark:bg-gray-800 relative border-b border-gray-300 w-full p-4 flex flex-wrap justify-between items-center rounded-t-lg">
-                            <div>
-                                <input @change="selectAll" type="checkbox">
-                            </div>
+                            <input @change="selectAll" type="checkbox">
                             <button @click="filtersOpen= !filtersOpen" class="focus:outline-none flex flex-wrap items-center p-2 rounded-lg" :class="{'bg-gray-300 dark:bg-gray-700': filtersOpen, 'bg-gray-100 dark:bg-gray-900': !filtersOpen}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -78,6 +76,14 @@
                             No {{ singular.toLowerCase() }} data
                         </div>
 
+                    </div>
+
+                    <div class="w-full flex justify-between flex-wrap bg-slate-100 dark:bg-gray-800 px-4 py-2">
+                        <button :disabled="hasPreviousPage" class="px-4 py-2 rounded border border-slate-200 dark:border-slate-400" :class="[!hasPreviousPage ? 'opacity-50 cursor-not-allowed': '']">Previous</button>
+                        <div class="py-2">
+                            {{ total }} total items, {{paginator?.per_page}} on page {{ currentPage }} 
+                        </div>
+                        <button :disabled="hasNextPage" class="px-4 py-2 rounded border border-slate-200 dark:border-slate-400" :class="[!hasNextPage ? 'opacity-50 cursor-not-allowed': '']">Next</button>
                     </div>
                 </div>
             </div>
@@ -150,6 +156,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        paginator: {
+            type: Object,
+            default: () => ({}),
+        }
     },
     setup() {
         return {
@@ -165,7 +175,22 @@ export default {
             const key = this.title.toLowerCase().replace(' ', '-');
 
             return this.$store.getters.actionsForFeature[key] ?? []
-        }
+        },
+        hasPreviousPage() {
+            return this.paginator.prev_page_url !== null;
+        },
+        hasNextPage() {
+            return this.paginator.next_page_url !== null;
+        },
+        total() {
+            return this.paginator.total;
+        },
+        currentPage() {
+            return this.paginator.current_page;
+        },
+        lastPage() {
+            return Math.max(this.paginator.total / this.paginator.per_page, 1);
+        },
     },
     methods: {
         hasErrors(error) {
@@ -175,8 +200,8 @@ export default {
 
             return this.form.errors[error];
         },
-        getData() {
-            this.$emit('index');
+        getData(page = 1, limit = 15) {
+            this.$emit('index', { page, limit });
         },
         selectAll(event) {
             if (event.target.checked) {

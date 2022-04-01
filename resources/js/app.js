@@ -13,8 +13,11 @@ Spork.component('crud-view', require('./components/CrudView').default);
 Spork.component('feature-required', require('./components/FeatureRequired').default);
 Spork.component('dual-menu-panel', require('./components/DualMenuPanel').default);
 Spork.component('spork-input', require('./components/SporkInput').default);
+Spork.component('loading-ascii', require('./components/LoadingAscii').default);
+
 
 Spork.setupStore({
+    Navigation: require('./store/Navigation').default,
     Authentication: require('./store/Authentication').default,
     Feature: require('./store/Feature').default,
     ActivityLog: require('./store/ActivityLog').default,
@@ -27,9 +30,10 @@ Spork.build(async ({ store, router }) => {
         router.push('/login');
         return;
     }
-    store.dispatch('getFeatureLists', {
-        include: 'accounts',
-    })
+
+    const fetchFeatures = () =>  store.dispatch('getFeatureLists', {
+        include: ['accounts', 'repeatable.users.user'],
+    });
 
     store.dispatch('fetchLogs', {
         filter: {
@@ -37,11 +41,26 @@ Spork.build(async ({ store, router }) => {
         },
         include: 'causer,subject',
     })
-    Echo.private(`user.${store.getters.user.id}`).listen('FeatureCreated', console.log)
+    console.log(`user.${store.getters.user.id}`);
 
+    fetchFeatures();
+    Echo.private(`user.${store.getters.user.id}`)
+        .listen('.FeatureCreated', fetchFeatures)
+        .listen('.FeatureDeleted', fetchFeatures)
+        .listen('.FeatureUpdated', fetchFeatures)
+        .listen('.RedeployRequested', (event) => {
+            console.log('redeploy requested', event);
+        })
+        .listen('.SetupComplete', (event) => {
+            Spork.toast('Setup complete! Enjoy your new Spork!');
+            console.log('setup complete', event);
+        })
+        .notification((notification) => {
+            store.dispatch('fetchUser');
+        })
 });
 
-
+require('@system/development/resources/app');
 require('@system/news/resources/app');
 require('@system/finance/resources/app');
 require('@system/calendar/resources/app');
@@ -55,5 +74,6 @@ require('@system/greenhouse/resources/app');
 require('@system/food/resources/app');
 
 Spork.routesFor('authentication', [
+    Spork.authenticatedRoute('setup', './routes/Setup'),
     Spork.authenticatedRoute('settings', './routes/Profile/UserAccount'),
 ]);

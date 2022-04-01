@@ -16,7 +16,7 @@ mix
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('autoprefixer'),
-        require('tailwindcss')
+        require('tailwindcss'),
     ])
     .webpackConfig({
         resolve: {
@@ -28,9 +28,14 @@ mix
                 '@': path.resolve(__dirname, 'resources/js'),
                 '@system': path.resolve(__dirname, 'system'),
             }
-        }
+        },
     })    
     .vue()
+    .copy('node_modules/ace-builds/src-min-noconflict/ext-*.js', 'public/js/')
+    .copy('node_modules/ace-builds/src-min-noconflict/mode-*.js', 'public/js/')
+    .copy('node_modules/ace-builds/src-min-noconflict/keybinding-*.js', 'public/js/')
+    .copy('node_modules/ace-builds/src-min-noconflict/theme-*.js', 'public/js/')
+    .copy('node_modules/ace-builds/src-min-noconflict/worker-*.js', 'public/js/')
     .js([
         'resources/js/app.js',
         // This must be the last file in the list

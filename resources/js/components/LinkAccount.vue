@@ -146,8 +146,6 @@
                             return;
                         }
 
-                        console.log({ public_token })
-
                         const { data: token } = await axios.post('/finance/plaid/exchange-token', {
                             public_token: public_token,
                             institution: institution_id
@@ -165,7 +163,6 @@
 
                         }
                         if (err != null) {
-                            console.log(err.message || err.error_code, this.$toasted);
                             return;
                         }
                     },

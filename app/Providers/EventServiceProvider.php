@@ -6,6 +6,9 @@ use App\Events;
 use App\Events\FeatureCreated;
 use App\Events\FeatureDeleted;
 use App\Events\FeatureUpdated;
+use App\Events\Spork\ActionRegistered;
+use App\Events\Spork\AssetPublished;
+use App\Events\Spork\FeatureRegistered;
 use App\Models\FeatureList;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -16,6 +19,15 @@ use Spork\Finance\Events\AccountUpdateRequested;
 use Spork\Finance\Events\BankLinkedEvent;
 use Spork\Finance\Listeners\SyncTransactionsForAccessTokenListener;
 use Spork\Finance\Models\Transaction;
+use BeyondCode\LaravelWebSockets\Events\NewConnection;
+use BeyondCode\LaravelWebSockets\Events\WebSocketMessageReceived;
+use BeyondCode\LaravelWebSockets\Events\ConnectionPonged;
+use BeyondCode\LaravelWebSockets\Events\ConnectionClosed;
+use Spork\Development\Events\PublishGitInformationRequested;
+use Spork\Development\Events\RedeployRequested;
+use Spork\Development\Listeners\CopyTemplateIfApplicableListener;
+use Spork\Development\Listeners\DeleteDevelopmentFiles;
+use Spork\Development\Listeners\SendGitInformationToChannel;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -35,14 +47,38 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        FeatureCreated::class => [
-            SyncTransactionsForAccessTokenListener::class,
-        ],
         AccountUpdateRequested::class => [
             SyncTransactionsForAccessTokenListener::class,
         ],
-        FeatureDeleted::class => [],
-        FeatureUpdated::class => [],
+
+        // Spork Events
+        FeatureRegistered::class => [],
+        AssetPublished::class => [],
+        ActionRegistered::class => [],
+
+        FeatureCreated::class => [
+            CopyTemplateIfApplicableListener::class,
+        ],
+        FeatureUpdated::class => [
+            //
+        ],
+        FeatureDeleted::class => [
+            DeleteDevelopmentFiles::class,
+        ],
+        // Websocket
+        ConnectionClosed::class => [],
+        NewConnection::class => [],
+        WebSocketMessageReceived::class => [],
+        ConnectionPonged::class => [],
+
+        PublishGitInformationRequested::class => [
+            SendGitInformationToChannel::class
+        ],
+
+        RedeployRequested::class => [
+            DeleteDevelopmentFiles::class,
+            CopyTemplateIfApplicableListener::class,
+        ],
     ];
 
     /**

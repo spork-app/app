@@ -31,6 +31,6 @@ class FeatureUpdated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('user.'.auth()->id());
     }
 }

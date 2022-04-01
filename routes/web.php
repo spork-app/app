@@ -22,5 +22,5 @@ Route::middleware(['web', RedirectIfAuthenticated::class])->get('/forget-passwor
 
 Route::get('/{uri?}/{subPath?}', fn() => view('welcome'))
     ->middleware('auth:sanctum')
-    ->where('uri', '^((?!(api)).)*')
+    ->where('uri', '^((?!(api|public)).)*')
     ->where('subPath', '.*');

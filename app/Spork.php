@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Events\Spork\ActionRegistered;
+use App\Events\Spork\AssetPublished;
+use App\Events\Spork\FeatureRegistered;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -20,10 +23,13 @@ class Spork
     {
         self::$features[Str::slug($featureName)] = [
             'name' => Str::title($featureName),
+            'slug' => Str::slug($featureName),
             'icon' => $icon,
             'path' => $path,
             'enabled' => config('spork.'.Str::slug($featureName).'.enabled', false),
         ];
+
+        event(new FeatureRegistered($featureName, $icon, $path, config('spork.'.Str::slug($featureName).'.enabled', false)));
     }
 
     public static function publish(string $type, string $asset = null)
@@ -33,6 +39,7 @@ class Spork
         }
 
         static::$assets[$type][] = $asset;
+        event(new AssetPublished($type, $asset));
     }
 
     public static function actions(string $feature, string $path)
@@ -62,12 +69,14 @@ class Spork
 
             $instance = new $class;
 
-            $actions[$feature][] = [
+            $action = [
                 'name' => $instance->getName(),
                 'url' => $instance->getUrl(),
                 'tags' => $instance->tags(),
             ];
+            $actions[$feature][] = $action;
             Route::post($instance->getUrl(), $class);
+            event(new ActionRegistered($feature, $action));
         }
 
         static::$actions = array_merge(

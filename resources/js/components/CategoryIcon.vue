@@ -14,7 +14,6 @@ export default {
     props: ['category'],
     methods: {
         includes(category) {
-            console.log(category, this .category)
             if (this.category) {
                 return ;
             }

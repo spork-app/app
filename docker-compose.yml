@@ -35,6 +35,40 @@ services:
     depends_on:
       - redis
       - mysql
+  app.websocket:
+    build:
+      context: ./docker/websocket
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    ports:
+      - '${APP_WEBSOCKET_PORT:-6001}:6001'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_docker_admin: 1
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - docker_admin
+    depends_on:
+      - redis
+      - mysql
+  app.horizon:
+    build:
+      context: ./docker/horizon
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_docker_admin: 1
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - docker_admin
+    depends_on:
+      - redis
+      - mysql
   app.cron:
     build:
       context: ./docker/crontab

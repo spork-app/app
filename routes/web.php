@@ -18,6 +18,7 @@ use Laravel\Telescope\Avatar;
 */
 Route::middleware(['web', RedirectIfAuthenticated::class])->get('/login', fn() => view('welcome'));
 Route::middleware(['web', RedirectIfAuthenticated::class])->get('/register', fn() => view('welcome'));
+Route::middleware(['web', RedirectIfAuthenticated::class])->get('/verify', fn() => view('welcome'))->name('verification.verify');
 Route::middleware(['web', RedirectIfAuthenticated::class])->get('/forget-password', fn() => view('welcome'));
 
 Route::get('/{uri?}/{subPath?}', fn() => view('welcome'))

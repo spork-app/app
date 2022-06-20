@@ -48,30 +48,15 @@ Spork.build(async ({ store, router }) => {
         .listen('.FeatureCreated', fetchFeatures)
         .listen('.FeatureDeleted', fetchFeatures)
         .listen('.FeatureUpdated', fetchFeatures)
-        .listen('.RedeployRequested', (event) => {
-            console.log('redeploy requested', event);
-        })
         .listen('.SetupComplete', (event) => {
             Spork.toast('Setup complete! Enjoy your new Spork!');
-            console.log('setup complete', event);
         })
         .notification((notification) => {
             store.dispatch('fetchUser');
         })
 });
 
-require('@system/development/resources/app');
-require('@system/news/resources/app');
-require('@system/finance/resources/app');
-require('@system/calendar/resources/app');
-require('@system/maintenance/resources/app');
-require('@system/planning/resources/app');
-require('@system/research/resources/app');
-
-// Shopping needs to be refactored, the current service (meijer) isn't fully supported
-// require('@system/shopping/resources/app');
-require('@system/greenhouse/resources/app');
-require('@system/food/resources/app');
+// require('@vendor/spork/development/resources/app');
 
 Spork.routesFor('authentication', [
     Spork.authenticatedRoute('setup', './routes/Setup'),

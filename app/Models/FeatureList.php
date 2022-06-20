@@ -5,10 +5,6 @@ namespace App\Models;
 use App\Events\FeatureCreated;
 use App\Events\FeatureDeleted;
 use App\Events\FeatureUpdated;
-use Spork\Calendar\Traits\Repeatable;
-use Spork\Finance\Models\Account;
-use Spork\Maintenance\Traits\Workable;
-use Spork\Research\Models\ResearchNote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +21,7 @@ use Spatie\Tags\HasTags;
  */
 class FeatureList extends Model implements AbstractEloquentModel
 {
-    use HasFactory, HasTags, Workable, AbstractModelTrait, Repeatable;
+    use HasFactory, HasTags, AbstractModelTrait;
 
     public const FEATURE_RESEARCH = 'research';
     public const FEATURE_FINANCE = 'finance';

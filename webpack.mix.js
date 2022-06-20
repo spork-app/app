@@ -26,6 +26,7 @@ mix
                 '@store': path.resolve(__dirname, 'resources/js/store'),
                 '@icons': path.resolve(__dirname, 'resources/js/icons'),
                 '@': path.resolve(__dirname, 'resources/js'),
+                '@vendor': path.resolve(__dirname, 'vendor'),
                 '@system': path.resolve(__dirname, 'system'),
             }
         },
@@ -36,6 +37,8 @@ mix
     .copy('node_modules/ace-builds/src-min-noconflict/keybinding-*.js', 'public/js/')
     .copy('node_modules/ace-builds/src-min-noconflict/theme-*.js', 'public/js/')
     .copy('node_modules/ace-builds/src-min-noconflict/worker-*.js', 'public/js/')
+    .copy('resources/sounds/*.ogg', 'public')
+    .copy('resources/images/*.png', 'public')
     .js([
         'resources/js/app.js',
         // This must be the last file in the list

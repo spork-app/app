@@ -47,3 +47,33 @@ Artisan::command('populate', function () {
 
     dd($rule->getOccurrencesBetween(Carbon::now()->startOfYear(), Carbon::now()->addYear()));
 });
+
+Artisan::command('install', function () {
+    // Install new composer deps
+    $this->info("Thank you for installing Spork! Let us now install some dependencies to give this framework legs!");
+    //guzzle fetch packagist tag
+    $client = new Client;
+    $response = $client->get('https://packagist.org/search.json?tags=spork%20app');
+    $data = json_decode($response->getBody()->getContents());
+
+    if ($data->total == 0) {
+        $this->error("No packages found. Please try again.");
+        return;
+    }
+    
+    $this->info("Found " . $data->total . " packages.");
+    
+    $packages = array_map(fn ($item) => $item->name, $data->results);
+
+    $selectedPackages = $this->choice(
+        'Which packages would you like to install?', 
+        $packages,
+        0,
+        1,
+        true
+    );
+    
+    $composer = 'composer require '.implode(' ', $selectedPackages);
+    $output = shell_exec($composer);
+    echo $output;
+});

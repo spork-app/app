@@ -15,19 +15,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
-use Spork\Finance\Events\AccountUpdateRequested;
-use Spork\Finance\Events\BankLinkedEvent;
-use Spork\Finance\Listeners\SyncTransactionsForAccessTokenListener;
-use Spork\Finance\Models\Transaction;
 use BeyondCode\LaravelWebSockets\Events\NewConnection;
 use BeyondCode\LaravelWebSockets\Events\WebSocketMessageReceived;
 use BeyondCode\LaravelWebSockets\Events\ConnectionPonged;
 use BeyondCode\LaravelWebSockets\Events\ConnectionClosed;
-use Spork\Development\Events\PublishGitInformationRequested;
-use Spork\Development\Events\RedeployRequested;
-use Spork\Development\Listeners\CopyTemplateIfApplicableListener;
-use Spork\Development\Listeners\DeleteDevelopmentFiles;
-use Spork\Development\Listeners\SendGitInformationToChannel;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -57,28 +48,19 @@ class EventServiceProvider extends ServiceProvider
         ActionRegistered::class => [],
 
         FeatureCreated::class => [
-            CopyTemplateIfApplicableListener::class,
+            //
         ],
         FeatureUpdated::class => [
             //
         ],
         FeatureDeleted::class => [
-            DeleteDevelopmentFiles::class,
+            //
         ],
         // Websocket
         ConnectionClosed::class => [],
         NewConnection::class => [],
         WebSocketMessageReceived::class => [],
         ConnectionPonged::class => [],
-
-        PublishGitInformationRequested::class => [
-            SendGitInformationToChannel::class
-        ],
-
-        RedeployRequested::class => [
-            DeleteDevelopmentFiles::class,
-            CopyTemplateIfApplicableListener::class,
-        ],
     ];
 
     /**

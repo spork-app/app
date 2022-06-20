@@ -3,7 +3,7 @@
       <div class="text-4xl m-4">
           Initial Setup
       </div>
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.development">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Deveopment</h3>
@@ -11,7 +11,7 @@
           </div>
 
           <div class="grid grid-cols-3 gap-2">
-            <div v-for="(project, index) in form?.development?.projects" :key="'project.'+index" class="col-span-3 sm:col-span-2 border-t pt-2">
+            <div v-for="(project, index) in (form?.development?.projects ?? [])" :key="'project.'+index" class="col-span-3 sm:col-span-2 border-t pt-2">
                 <label for="company-website" class="block text-sm font-medium text-slate-700 dark:text-slate-200"> Name </label>
                 <div class="mt-1 rounded-md shadow-sm flex">
                   <spork-input v-model="form.development.projects[index].name" type="text" />
@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-span-3">
-              <button class="text-xs" @click="form.planning.statuses.push({ name: '', settings: {}})">+ Add status</button>
+              <button class="text-xs" @click="form.development.projects.push({ name: '', settings: {}})">+ Add status</button>
             </div>
           </div>
           <div class="grid grid-cols-3 gap-6">
@@ -47,7 +47,7 @@
     </div>
 
 
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.calendar">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Calendar</h3>
@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.finance">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Finance</h3>
@@ -116,7 +116,7 @@
     </div>
 
     
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.garage">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Garage</h3>
@@ -149,7 +149,7 @@
           </div>
         </div>
     </div>
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.properties">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Properties</h3>
@@ -191,7 +191,7 @@
         </div>
     </div>
 
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.planning">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Planning</h3>
@@ -224,7 +224,7 @@
         </div>
     </div>
 
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.research">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Research</h3>
@@ -263,7 +263,7 @@
         </div>
     </div>
 
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.greenhouse">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Greenhouse</h3>
@@ -281,8 +281,7 @@
         </div>
     </div>
 
-
-    <div class="shadow sm:rounded-md sm:overflow-hidden m-4">
+    <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.food">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
             <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-slate-50">Food</h3>
@@ -298,6 +297,10 @@
               </div>
           </div>
         </div>
+    </div>
+
+    <div v-if="Object.keys(form).length === 0" class="w-full text-lg p-4">
+      You have no spork plugins installed
     </div>
 
     <div class="px-4 py-3 bg-gray-50 dark:bg-slate-800 text-right sm:px-6">
@@ -322,55 +325,66 @@ export default {
             }
         }), {});
 
-        form.development.projects = Object.keys(form).filter(feature => form[feature].enabled).map(feature => ({
-          name: feature,
-          settings: {
-            ...(form[feature]?.settings ?? {}),
-            path: '/system/' + feature,
+        if (form.development) {
+          let envData = {};
+          try {
+            envData = JSON.parse(document.getElementById('data').getAttribute('data-env'))
+          } catch (e) {
+            console.log('failed to load env data', e);
           }
-        }));
+          form.development.projects = Object.keys(form).filter(feature => form[feature].enabled).map(feature => ({
+            name: feature,
+            settings: {
+              ...(form[feature]?.settings ?? {}),
+              path: '/system/' + feature,
+            }
+          }));
 
-        let envData = {};
-        try {
-          envData = JSON.parse(document.getElementById('data').getAttribute('data-env'))
-        } catch (e) {
-          console.log('failed to load env data', e);
+
+          form.development.import = false;
+        }
+        if (form.news) {
+          form.news.news_api_key = envData?.NEWS_API_KEY ?? '';
         }
 
-        form.development.import = false;
-
-        if (!form.news) {
-          form.news = {}
+        if (form.calendar) {
+          form.calendar.name = this.$store.getters.user.name+"'s Calendar";
         }
 
-        form.news.news_api_key = envData?.NEWS_API_KEY ?? '';
-        form.calendar.name = this.$store.getters.user.name+"'s Calendar";
+        if (form.finance) {
+          form.finance.plaid_client_secret = envData?.PLAID_CLIENT_SECRET ?? '';
+          form.finance.plaid_client_id = envData?.PLAID_CLIENT_ID ?? '';
+          form.finance.plaid_env = envData?.PLAID_ENVIRONMENT ?? '';
+        }
 
+        if (form.garage) {
+          form.garage.name = '';
+          form.garage.settings.vin = '';
+        }
 
+        if (form.planning) {
+          form.planning.statuses = [
+            'Backlog',
+            'To Do',
+            'In Progress',
+            'Done'
+          ];
+        }
 
-        form.finance.plaid_client_secret = envData?.PLAID_CLIENT_SECRET ?? '';
-        form.finance.plaid_client_id = envData?.PLAID_CLIENT_ID ?? '';
-        form.finance.plaid_env = envData?.PLAID_ENVIRONMENT ?? '';
+        if (form.properties) {
+          form.properties.name = '';
+          form.properties.settings.address = '';
+        }
 
-        form.garage.name = '';
-        form.garage.settings.vin = '';
-
-        form.planning.statuses = [
-          'Backlog',
-          'To Do',
-          'In Progress',
-          'Done'
-        ];
-
-        form.properties.name = '';
-        form.properties.settings.address = '';
-
-        form.research.google_search_api_key = envData?.GOOGLE_SEARCH_API_KEY ?? '';
-        form.research.topics = [];
+        if (form.research) {
+          form.research.google_search_api_key = envData?.GOOGLE_SEARCH_API_KEY ?? '';
+          form.research.topics = [];
+        }
 
         return {
             form,
-            Features
+            Features,
+            Object,
         }
     },
     methods: {

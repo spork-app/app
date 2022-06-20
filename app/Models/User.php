@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Spork\Planning\Models\Status;
-use Spork\Planning\Models\Task;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -78,26 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function profilePhotoDisk()
     {
         return 'public';
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class, 'creator_id')->orderBy('order');
-    }
-
-    public function tasksCreated()
-    {
-        return $this->hasMany(Task::class, 'creator_id')->orderBy('order');
-    }
-
-    public function tasksAssigned()
-    {
-        return $this->hasMany(Task::class, 'assignee_id')->orderBy('order');
-    }
-
-    public function statuses()
-    {
-        return $this->hasMany(Status::class)->orderBy('order');
     }
 
     public function features()

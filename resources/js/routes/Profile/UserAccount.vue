@@ -196,7 +196,7 @@ export default defineComponent({
         city: this.$store.getters.primaryAddress?.settings?.city,
         country: this.$store.getters.primaryAddress?.settings?.country,
         zip: this.$store.getters.primaryAddress?.settings?.zip,
-        ... this.$store.getters.features.properties ? {} : {}
+        ... this.$store.getters.features?.properties ? {} : {}
       },
       photoPreview: null,
     }
@@ -211,6 +211,9 @@ export default defineComponent({
     },
     '$store.getters.primaryAddress': {
       handler(newValue) {
+        if (!newValue?.settings) {
+          return;
+        }
         this.form.address = newValue.settings?.address
         this.form.state = newValue.settings?.state
         this.form.city = newValue.settings?.city
@@ -230,18 +233,21 @@ export default defineComponent({
         name: this.form.name,
         email: this.form.email,
         photo: this.form.photo,
-      })
-      this.$store.dispatch('updateFeature', {
-        ...this.$store.getters.primaryAddress,
-        settings: {
-          ...this.$store.getters.primaryAddress.settings,
-          address: this.form.address,
-          state: this.form.state,
-          city: this.form.city,
-          country: this.form.country,
-          zip: this.form.zip,
-        }
-      })
+      });
+
+      if (this.$store.getters.primaryAddress) {
+        this.$store.dispatch('updateFeature', {
+          ...this.$store.getters.primaryAddress,
+          settings: {
+            ...this.$store.getters.primaryAddress.settings,
+            address: this.form.address,
+            state: this.form.state,
+            city: this.form.city,
+            country: this.form.country,
+            zip: this.form.zip,
+          }
+        });
+      }
     },
     
     updatePhotoPreview() {

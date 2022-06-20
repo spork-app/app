@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-800">
         <div>
             <a href="/">
-                Logo
+                <img src="/logo_transparent.png" alt="logo" class="h-64">
             </a>
         </div>
 
@@ -32,6 +32,11 @@
                 </div>
             </form>
         </div>
+        <div class="w-full flex items-center justify-center mt-6">
+            <router-link to="/register" class="text-sm text-blue-500 hover:text-blue-800 font-bold dark:text-blue-400 dark:hover:text-blue-300">
+                Don't have an account?
+            </router-link>
+        </div>
     </div>
 </template> 
 
@@ -58,7 +63,7 @@ export default {
     watch: {
         '$store.getters.isAuthenticated': function(old, newVal) {
             if (newVal) {
-                this.$router.push('/planning');
+                this.$router.push('/setup');
             }
         }
     }

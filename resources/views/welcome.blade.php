@@ -10,6 +10,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="{{ mix('css/app.css') }}" rel="stylesheet">
         <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+        
+        <!-- favicon -->
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
         <script>
             @php 

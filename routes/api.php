@@ -36,12 +36,13 @@ Route::middleware(['api', 'auth:sanctum'])->get('news', function (\Spork\News\Co
 });
 
 Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
-    // abort_if(file_exists(storage_path('app/setup.json')), 404, 'Setup has already been run.');
+    abort_if(file_exists(storage_path('app/setup.json')), 404, 'Setup has already been run.');
 
     $dumper = new Nette\PhpGenerator\Dumper;
     $from = require base_path('config/spork.php');
 
     $env = [];
+    $data = request()->all();
 
     foreach (request()->all() as $key => $value) {
         $enabled = $from[$key]['enabled'] = $value['enabled'] ?? false;
@@ -49,8 +50,6 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
         if (!$enabled) {
             continue;
         }
-
-        $data = request()->all();
 
         if ($key === 'news') {
             $env['NEWS_API_KEY'] = Arr::get($data, 'news.news_api_key');
@@ -68,7 +67,7 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
     }
 
         /// Development
-        if (Arr::get($data, 'development.enabled') && $projects = Arr::get($data, 'development.projects', null)) {
+        if (Arr::get($data, 'development.enabled', false) && $projects = Arr::get($data, 'development.projects', null)) {
             foreach ($projects as $project) {
                 $feature = FeatureList::forFeature('development')->firstWhere('name', $project['name']);
                 if (empty($feature) && Arr::get($data, 'development.import', false)) {
@@ -82,7 +81,7 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
         }
 
         // Calendar
-        if (Arr::get($data, 'calendar.enabled') && $calendar = Arr::get($data,'calendar.name', null)) {
+        if (Arr::get($data, 'calendar.enabled', false) && $calendar = Arr::get($data,'calendar.name', null)) {
             $feature = FeatureList::forFeature('calendar')->firstWhere('name', $calendar);
             if (empty($feature)) {
                 FeatureList::create([
@@ -93,7 +92,7 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
             }
         }
         // Researching
-        if (Arr::get($data, 'research.enabled') && $topics = Arr::get($data,'research.topics', [])) {
+        if (Arr::get($data, 'research.enabled', false) && $topics = Arr::get($data,'research.topics', [])) {
             foreach ($topics as $topic) {
                 $feature = FeatureList::forFeature('research')->firstWhere('name', $topic);
                 if (empty($feature)) {
@@ -107,7 +106,7 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
         }
 
         // Planning
-        if (Arr::get($data, 'planning.enabled') && $topics = Arr::get($data,'planning.statuses', [])) {
+        if (Arr::get($data, 'planning.enabled', false) && $topics = Arr::get($data,'planning.statuses', [])) {
             foreach ($topics as $topic) {
                 $feature = auth()->user()->statuses()->firstWhere('title', $topic);
                 if (empty($feature)) {
@@ -120,7 +119,7 @@ Route::middleware(['api', 'auth:sanctum'])->post('/initial-setup', function () {
             }
         }
 
-        if (Arr::get($data, 'properties.enabled') && $address = Arr::get($data, 'properties.settings.address', null)) {
+        if (Arr::get($data, 'properties.enabled', false) && $address = Arr::get($data, 'properties.settings.address', null)) {
             FeatureList::create([
                 'name' => Arr::get($data, 'properties.settings', 'home'),
                 'settings' => [

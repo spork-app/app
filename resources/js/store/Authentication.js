@@ -71,6 +71,26 @@ export default {
                 setTimeout(() => state.loading = false, 400);
             }
         },
+        async register({ commit, dispatch, state }, { name, email, password, password_confirmation }) {
+            state.loading = true;
+            try {
+                await axios.post('/register', { name, email, password, password_confirmation })
+                commit('setAuthenticated', true);
+                await dispatch('fetchUser');
+                Spork.bootCallbacks();
+                commit('setErrors', null)
+            } catch (error) {
+                if (error.response.status === 422) {
+                     commit('setErrors', error.response.data);
+                } else if (error.response.status === 429) {
+                    commit('setErrors', {
+                        email: ['Too many login attempts. Please try again in ' + dayjs(Number(error.response.headers['x-ratelimit-reset']) * 1000).diff(dayjs(), 'second') + ' seconds.'],
+                    });
+                }
+            } finally {
+                setTimeout(() => state.loading = false, 400);
+            }
+        },
         async fetchUser({ commit }) {
             try {
                 // use axios to get the user from the api

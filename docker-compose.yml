@@ -53,22 +53,6 @@ services:
     depends_on:
       - redis
       - mysql
-  app.horizon:
-    build:
-      context: ./docker/horizon
-      dockerfile: Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
-    environment:
-      WWWUSER: '${WWWUSER}'
-      LARAVEL_docker_admin: 1
-    volumes:
-      - '.:/var/www/html'
-    networks:
-      - docker_admin
-    depends_on:
-      - redis
-      - mysql
   app.cron:
     build:
       context: ./docker/crontab

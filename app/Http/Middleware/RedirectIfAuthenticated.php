@@ -27,6 +27,10 @@ class RedirectIfAuthenticated
                     return response()->json(['error' => 'Already authenticated.'], 200);
                 }
             
+                if (file_exists(storage_path('setup.json'))) {
+                    return redirect('/setup');
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }

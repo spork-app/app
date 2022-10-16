@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Telescope\Avatar;
 
 /*
 |--------------------------------------------------------------------------

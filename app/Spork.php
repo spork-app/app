@@ -8,7 +8,7 @@ use App\Events\Spork\FeatureRegistered;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-class Spork 
+class Spork
 {
     public static $assets = [
         'css' => [],
@@ -50,7 +50,7 @@ class Spork
             $feature => [],
         ];
 
-        foreach (glob($path . '/*.php') as $file) {
+        foreach (glob($path.'/*.php') as $file) {
             $contents = file_get_contents($file);
 
             $basename = basename($file, '.php');
@@ -59,8 +59,8 @@ class Spork
                 continue;
             }
 
-            if (stripos($contents, 'class '. $basename) === false) {
-                continue; 
+            if (stripos($contents, 'class '.$basename) === false) {
+                continue;
             }
 
             preg_match('/namespace\s+(.*);/', $contents, $matches);

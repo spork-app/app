@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Telescope\Avatar;
 use Spork\Core\Models\FeatureList;
 
 class User extends Authenticatable implements MustVerifyEmail

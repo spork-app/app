@@ -3,7 +3,6 @@
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Artisan;
 
-
 /*
 |--------------------------------------------------------------------------
 | Console Routes

@@ -1,8 +1,8 @@
 <?php
 
 use App\Events\SetupCompleted;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Spork\Core\Models\FeatureList;
 

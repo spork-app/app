@@ -4,7 +4,6 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Spork\Food\Commands\SyncHelloFresh;
 
 class Kernel extends ConsoleKernel
 {

@@ -3,11 +3,7 @@
 namespace App\Providers;
 
 use Google\Client;
-use Google\Service\CustomSearchAPI;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,7 +30,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        
     }
 }

@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-
 abstract class SporkServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +13,6 @@ abstract class SporkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 
     /**
@@ -24,5 +22,5 @@ abstract class SporkServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    }  
+    }
 }

@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use BeyondCode\LaravelWebSockets\Events\ConnectionClosed;
+use BeyondCode\LaravelWebSockets\Events\ConnectionPonged;
+use BeyondCode\LaravelWebSockets\Events\NewConnection;
+use BeyondCode\LaravelWebSockets\Events\WebSocketMessageReceived;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 use Spork\Core\Events;
 use Spork\Core\Events\FeatureCreated;
 use Spork\Core\Events\FeatureDeleted;
@@ -9,16 +17,6 @@ use Spork\Core\Events\FeatureUpdated;
 use Spork\Core\Events\Spork\ActionRegistered;
 use Spork\Core\Events\Spork\AssetPublished;
 use Spork\Core\Events\Spork\FeatureRegistered;
-use Spork\Core\Models\FeatureList;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
-use BeyondCode\LaravelWebSockets\Events\NewConnection;
-use BeyondCode\LaravelWebSockets\Events\WebSocketMessageReceived;
-use BeyondCode\LaravelWebSockets\Events\ConnectionPonged;
-use BeyondCode\LaravelWebSockets\Events\ConnectionClosed;
 
 class EventServiceProvider extends ServiceProvider
 {

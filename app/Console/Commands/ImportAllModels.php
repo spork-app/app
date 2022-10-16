@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Spork;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spork\Core\Spork;
 
 class ImportAllModels extends Command
 {
@@ -41,7 +40,7 @@ class ImportAllModels extends Command
     public function handle()
     {
         array_map(function ($featureArray) {
-            try { 
+            try {
                 return array_map(function ($file) use ($featureArray) {
                     // include sprintf(base_path('system/%s/src/Models'), strtolower($featureArray['name'])) . '/' . $file;
                     $modelToImport = sprintf('Spork\\%s\\Models\\%s', $featureArray['name'], str_replace('.php', '', $file));
@@ -61,6 +60,7 @@ class ImportAllModels extends Command
                 return null;
             }
         }, Spork::$features);
+
         return 0;
     }
 }

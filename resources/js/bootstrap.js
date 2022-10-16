@@ -3,6 +3,8 @@ import CalendarEvent from './CalendarEvent'
 import { buildUrl } from '@kbco/query-builder';
 import Echo from 'laravel-echo';
 
+import '@system/core/resources/app';
+
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/localizedFormat'));
 dayjs.extend(require('dayjs/plugin/relativeTime'));
@@ -33,10 +35,15 @@ window.axios.interceptors.request.use(function (config) {
     const status = error?.response?.status
     if (status === 401) {
         window.location = "/login"
+        return Promise.reject(error);
     }
 
     if (status === 403) {
-        Spork.toast('You do not have permission to perform this action.', 'danger')
+        Spork.toast('You do not have permission to perform this action.', 'error')
+    }
+
+    if (status === 404) {
+        Spork.toast('The requested resource was not found.', 'error')
     }
 
     return Promise.reject(error);
@@ -79,7 +86,7 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     forceTLS: false,
-    wsHost: '127.0.0.1',
-    wsPort: 6001,
+    wsHost: window.location.host.includes('githubpreview.dev') ? window.location.host + '-6001' : window.location.host,
+    wsPort: window.location.host.includes('githubpreview.dev') ? 80 : 6001,
     encrypted: false
 });

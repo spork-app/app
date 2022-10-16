@@ -28,6 +28,7 @@ mix
                 '@': path.resolve(__dirname, 'resources/js'),
                 '@vendor': path.resolve(__dirname, 'vendor'),
                 '@system': path.resolve(__dirname, 'system'),
+                '@core': path.resolve(__dirname, 'vendor/spork/core/resources'),
             }
         },
     })    

@@ -26,7 +26,7 @@ class RedirectIfAuthenticated
                 if ($request->expectsJson()) {
                     return response()->json(['error' => 'Already authenticated.'], 200);
                 }
-            
+
                 if (file_exists(storage_path('setup.json'))) {
                     return redirect('/setup');
                 }

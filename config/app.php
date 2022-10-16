@@ -1,7 +1,5 @@
 <?php
 
-use Spork\Food\FoodServiceProvider;
-
 return [
 
     /*
@@ -164,6 +162,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        SocialiteProviders\Manager\ServiceProvider::class,
+        Spork\Core\SporkServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -171,25 +171,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        // Spork\Development\DevelopmentServiceProvider::class,
-        // Spork\Calendar\CalendarServiceProvider::class,
-        // Spork\Weather\Providers\WeatherServiceProvider::class,
-        // Spork\News\NewsServiceProvider::class,
-        // Spork\Finance\FinanceServiceProvider::class,
-        // Spork\Maintenance\MaintenanceServiceProvider::class,
-        // Spork\Planning\PlanningServiceProvider::class,
-        // Spork\Research\ResearchServiceProvider::class,
-        // Shopping needs to be refactored, the current service (meijer) isn't fully supported
-        // Spork\Shopping\ShoppingServiceProvider::class,
-        // Spork\Greenhouse\PlantServiceProvider::class,
-        // Spork\Food\FoodServiceProvider::class,
-        // Spork\Wiretap\ServiceProvider::class,
-   
-        // The abstract route services have to be registered last, otherwise there will be a fatal error
-        // because it tries to use the first parameter of `api/{route}` as a model, and fail to load.
-        App\Providers\AbstractRouteServiceProvider::class,
+        // Spork service providers _should_ be autoregistered, but any that aren't can be here.
     ],
 
     /*

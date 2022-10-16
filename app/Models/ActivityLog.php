@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Filters\FilterIn;
 use Kregel\LaravelAbstract\AbstractEloquentModel;
 use Kregel\LaravelAbstract\AbstractModelTrait;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class ActivityLog extends Activity implements AbstractEloquentModel
 {
@@ -26,7 +28,7 @@ class ActivityLog extends Activity implements AbstractEloquentModel
             'id',
             'log_name',
             'description',
-            'subject_type',
+            AllowedFilter::custom('subject_type', new FilterIn),
             'subject_id',
             'causer_type',
             'causer_id',
@@ -48,7 +50,9 @@ class ActivityLog extends Activity implements AbstractEloquentModel
 
     public function getAbstractAllowedSorts(): array
     {
-        return [];
+        return [
+            'created_at',
+        ];
     }
 
     public function getAbstractAllowedFields(): array
@@ -60,5 +64,4 @@ class ActivityLog extends Activity implements AbstractEloquentModel
     {
         return [];
     }
-
 }

@@ -5,7 +5,6 @@
 
         <div class="grid grid-cols-3 w-full gap-4 mx-4">
             <div v-for="service in $store.getters.services" :key="service.fqdn" class="bg-white p-4 shadow rounded">
-                
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between items-center">
                         <div class="font-bold">{{ service.name }}</div>

@@ -37,7 +37,7 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
         }
 
         $this->call('make:feature', [
-            '--feature' => $this->getFeature()
+            '--feature' => $this->getFeature(),
         ]);
         // Next, we will generate the path to the location where this class' file should get
         // written. Then, we will build the class and make the proper replacements on the
@@ -59,7 +59,7 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['feature', null, InputOption::VALUE_REQUIRED, 'The name of the feature']
+            ['feature', null, InputOption::VALUE_REQUIRED, 'The name of the feature'],
         ];
     }
 
@@ -73,7 +73,7 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
         $feature = $this->getFeature();
 
         if (empty($feature)) {
-            throw new LogicException("You must declare your --feature= flag");
+            throw new LogicException('You must declare your --feature= flag');
         }
 
         return sprintf('%s%s\\', $this->laravel->getNamespace(), $feature);
@@ -81,7 +81,7 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
 
     protected function stubPath($path = '', $feature = '')
     {
-        $views = trim('resources/stubs/' . $feature, '/');
+        $views = trim('resources/stubs/'.$feature, '/');
 
         return $views.($path ? DIRECTORY_SEPARATOR.trim($path, '/') : $path);
     }

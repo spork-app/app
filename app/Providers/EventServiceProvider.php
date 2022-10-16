@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Events;
-use App\Events\FeatureCreated;
-use App\Events\FeatureDeleted;
-use App\Events\FeatureUpdated;
-use App\Events\Spork\ActionRegistered;
-use App\Events\Spork\AssetPublished;
-use App\Events\Spork\FeatureRegistered;
-use App\Models\FeatureList;
+use Spork\Core\Events;
+use Spork\Core\Events\FeatureCreated;
+use Spork\Core\Events\FeatureDeleted;
+use Spork\Core\Events\FeatureUpdated;
+use Spork\Core\Events\Spork\ActionRegistered;
+use Spork\Core\Events\Spork\AssetPublished;
+use Spork\Core\Events\Spork\FeatureRegistered;
+use Spork\Core\Models\FeatureList;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,10 +23,15 @@ use BeyondCode\LaravelWebSockets\Events\ConnectionClosed;
 class EventServiceProvider extends ServiceProvider
 {
     public const ELOQUENT_UPDATED = 'eloquent.updated: ';
+
     public const ELOQUENT_UPDATING = 'eloquent.updating: ';
+
     public const ELOQUENT_CREATED = 'eloquent.created: ';
+
     public const ELOQUENT_CREATING = 'eloquent.creating: ';
+
     public const ELOQUENT_DELETED = 'eloquent.deleted: ';
+
     public const ELOQUENT_DELETING = 'eloquent.deleting: ';
 
     /**

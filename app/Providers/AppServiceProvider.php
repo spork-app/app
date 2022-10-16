@@ -7,7 +7,6 @@ use Google\Service\CustomSearchAPI;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
             $client = new Client();
             $client->setApplicationName('APP_NAME');
             $client->setDeveloperKey(env('GOOGLE_SEARCH_API_KEY'));
+
             return $client;
         });
     }
@@ -34,42 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Event::listen('*', function ($eventName, array $data) {
-            if (in_array($eventName, [
-                'Illuminate\\Log\\Events\\MessageLogged',
-                'Illuminate\\Redis\\Events\\CommandExecuted',
-                'Illuminate\Cache\Events\CacheHit',
-                'Illuminate\Cache\Events\KeyWritten',
-                'Illuminate\Database\Events\StatementPrepared',
-                'Illuminate\Database\Events\QueryExecuted',
-            ])) {
-                return;
-            }
 
-            if (Str::startsWith($eventName, [
-                'Illuminate\\Cache',
-                'Illuminate\\Database', 
-                'Illuminate\\Redis', 
-                'Illuminate\\Queue', 
-                'bootstrapped', 
-                'Illuminate\\Auth', 
-                'Illuminate\\Routing', 
-                'composing', 
-                'creating', 
-                'composed',
-                'eloquent.',
-                "Illuminate\\Foundation",
-                'Laravel\\Horizon',
-                'BeyondCode\LaravelWebSockets',
-            ])) {
-                return;
-            }
-
-            // if ($eventName === 'Illuminate\Foundation\Http\Events\RequestHandled') {
-                info(sprintf('Event: [%s]', $eventName), $data);        
-            // }
-
-        });
         
     }
 }

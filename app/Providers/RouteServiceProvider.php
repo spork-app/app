@@ -51,7 +51,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
@@ -60,11 +59,11 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('login', fn (Request $request) => Limit::perMinute(600)->by($request->email.$request->ip()));
         RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(600)->by($request->session()->get('login.id')));
 
-        Fortify::loginView(fn() => view('auth.login'));
-        Fortify::registerView(fn() => view('auth.register'));
-        Fortify::requestPasswordResetLinkView(fn() => view('auth.passwords.email'));
-        Fortify::resetPasswordView(fn() => view('auth.passwords.reset'));
-        Fortify::confirmPasswordView(fn() => view('auth.passwords.confirm'));
+        Fortify::loginView(fn () => view('auth.login'));
+        Fortify::registerView(fn () => view('auth.register'));
+        Fortify::requestPasswordResetLinkView(fn () => view('auth.passwords.email'));
+        Fortify::resetPasswordView(fn () => view('auth.passwords.reset'));
+        Fortify::confirmPasswordView(fn () => view('auth.passwords.confirm'));
     }
 
     /**

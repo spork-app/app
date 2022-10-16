@@ -8,8 +8,6 @@
             'py-2 px-4': submenu,
         }"
     >
-
-
         <router-link
             :to="to"
             class="flex gap-2 rounded items-center">

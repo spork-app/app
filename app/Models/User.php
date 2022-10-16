@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Telescope\Avatar;
+use Spork\Core\Models\FeatureList;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'socialite_id',
     ];
 
     /**
@@ -52,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $user->profile_photo = 'https://www.gravatar.com/avatar/'.md5(Str::lower($user->email)).'?s=200';
         });
     }
-    
+
     public function receivesBroadcastNotificationsOn()
     {
         return 'user.'.$this->id;
@@ -81,10 +83,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function features()
     {
         return $this->hasMany(FeatureList::class);
-    }
-
-    public function finance()
-    {
-        return $this->features()->where('feature', FeatureList::FEATURE_FINANCE);
     }
 }

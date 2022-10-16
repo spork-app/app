@@ -87,8 +87,6 @@ services:
       test: [ "CMD", "mysqladmin", "ping" ]
   redis:
     image: 'redis:alpine'
-    ports:
-      - '${FORWARD_REDIS_PORT:-6379}:6379'
     volumes:
       - 'docker_admin_redis:/data'
     networks:
@@ -105,8 +103,6 @@ services:
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
   meilisearch:
     image: 'getmeili/meilisearch:latest'
-    ports:
-      - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
     volumes:
       - 'docker_admin_meilisearch:/data.ms'
     networks:

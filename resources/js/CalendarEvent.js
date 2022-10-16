@@ -12,19 +12,19 @@ export default class CalendarEvent {
 
     nextOccurrences(start, end) {
         const definition = {
-            interval: this.calendarEvent?.interval,
-            freq: this.getCompatibleFrequency(this.calendarEvent?.frequency),
-            wkst: this.calendarEvent?.weekday_start || undefined,
-            count: this.calendarEvent?.number_of_occurrences || undefined,
-            bymonth: this.calendarEvent?.for_months?.split(','),
-            byweekno: this.calendarEvent?.for_week_numbers?.split(','),
-            byyearday: this.calendarEvent?.for_year_day?.split(','),
-            bymonthday: this.calendarEvent?.for_month_day?.split(','),
-            byhour: this.calendarEvent?.for_hour?.split(','),
-            byminute: this.calendarEvent?.for_minute?.split(','),
-            bysecond: this.calendarEvent?.for_second?.split(','),
-            bysetpos: this.calendarEvent?.for_set_position?.split(','),
-            dtstart: this.calendarEvent?.date_start ? new Date(this.calendarEvent?.date_start) : undefined,
+            ...(this.calendarEvent?.interval ? { interval: this.calendarEvent?.interval } : {}),
+            ...(this.calendarEvent?.frequency ? { freq: this.getCompatibleFrequency(this.calendarEvent?.frequency) } : {}),
+            ...(this.calendarEvent?.weekday_start ? { wkst: this.calendarEvent?.weekday_start || undefined } : {}),
+            ...(this.calendarEvent?.number_of_occurrences ? { count: this.calendarEvent?.number_of_occurrences } : {}),
+            ...(this.calendarEvent?.for_months ? { bymonth: this.calendarEvent?.for_months } : {}),
+            ...(this.calendarEvent?.for_week_numbers ? {byweekno: this.calendarEvent?.for_week_numbers } : {}),
+            ...(this.calendarEvent?.for_year_day ? { byyearday: this.calendarEvent?.for_year_day } : {}),
+            ...(this.calendarEvent?.for_month_day ? { bymonthday: this.calendarEvent?.for_month_day } : {}),
+            ...(this.calendarEvent?.for_hour ? { byhour: this.calendarEvent?.for_hour } : {}),
+            ...(this.calendarEvent?.for_minute ? { byminute: this.calendarEvent?.for_minute } : {}),
+            ...(this.calendarEvent?.for_second ? { bysecond: this.calendarEvent?.for_second } : {}),
+            ...(this.calendarEvent?.for_set_position ? { bysetpos: this.calendarEvent?.for_set_position } : {}),
+            ...(this.calendarEvent?.date_start ? { dtstart: new Date(this.calendarEvent?.date_start) } : {}),
             // dtend: this.calendarEvent?.date_end ? new Date(this.calendarEvent?.date_end) : undefined,
         };
 
@@ -34,6 +34,8 @@ export default class CalendarEvent {
                 ...obj,
                 [key]: definition[key],
             }), {})
+
+        delete t.bysetpos; 
         const rule = new RRule(t);
         //
         // // return rule;

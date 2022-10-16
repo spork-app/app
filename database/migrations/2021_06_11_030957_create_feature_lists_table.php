@@ -24,7 +24,7 @@ class CreateFeatureListsTable extends Migration
         });
         Schema::create('feature_list_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\FeatureList::class, 'feature_list_id');
+            $table->foreignIdFor(\Spork\Core\Models\FeatureList::class, 'feature_list_id');
             $table->foreignIdFor(\App\Models\User::class, 'user_id');
             $table->string('role')->default('user');
             $table->timestamps();

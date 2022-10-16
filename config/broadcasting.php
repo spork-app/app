@@ -38,9 +38,9 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'encrypted' => true,
-                'host' => 'refactored-spork_app.websocket_1',
+                'host' => 'refactored-spork-app.websocket-1',
                 'port' => 6001,
-                'scheme' => 'http'
+                'scheme' => 'http',
             ],
         ],
 

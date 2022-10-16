@@ -46,7 +46,6 @@
         </div>
     </div>
 
-
     <div class="shadow sm:rounded-md sm:overflow-hidden m-4" v-if="form.calendar">
         <div class="bg-white dark:bg-slate-600 py-6 px-4 space-y-6 sm:p-6">
           <div>
@@ -308,11 +307,13 @@
             Start Setup
         </button>
     </div>
+    <pre class="text-white">{{ system }}</pre>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['system'],
     data() {
         const form = Object.keys(Features).reduce((listOfFeatures, key) => ({
             ...listOfFeatures,
@@ -396,7 +397,3 @@ export default {
     },
 }
 </script>
-
-<style>
-
-</style>

@@ -2,16 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\FeatureList;
-use Spork\Finance\Models\Account;
-use Spork\Finance\Models\Transaction;
 use App\Garage\Models\Vehicle;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Kregel\LaravelAbstract\AbstractEloquentModel;
 use Kregel\LaravelAbstract\Exceptions\ModelNotInstanceOfAbstractEloquentModel;
-use App\Models\ActivityLog;
+use Spork\Core\Models\FeatureList;
 use Spork\Greenhouse\Models\Seed;
 use Spork\Greenhouse\Models\Plant;
 
@@ -26,12 +24,7 @@ class AbstractRouteServiceProvider extends ServiceProvider
             ->middleware(['api', 'auth:sanctum'])
             ->route([
                 'users' => User::class,
-                'vehicles' => Vehicle::class,
                 'feature-list' => FeatureList::class,
-                'account' => Account::class,
-                'transaction' => Transaction::class,
-                'plants' => Plant::class,
-                'seeds' => Seed::class,
                 'activity-logs' => ActivityLog::class,
             ]);
 
@@ -40,13 +33,13 @@ class AbstractRouteServiceProvider extends ServiceProvider
 
             $model = new $class;
 
-            throw_if(!$model instanceof AbstractEloquentModel, ModelNotInstanceOfAbstractEloquentModel::class);
+            throw_if(! $model instanceof AbstractEloquentModel, ModelNotInstanceOfAbstractEloquentModel::class);
 
             return $model;
         });
 
         Route::bind('abstract_model_id', function ($value) {
-            $model = request()->route("abstract_model");
+            $model = request()->route('abstract_model');
 
             return $model::findOrFail($value);
         });

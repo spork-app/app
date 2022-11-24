@@ -192,7 +192,7 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
-//        App\Providers\TelescopeServiceProvider::class,
+        //        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         // Spork service providers _should_ be autoregistered, but any that aren't can be here.

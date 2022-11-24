@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['web'])->get('/login', fn () => \Socialite::driver('laravelpassport')->scopes(['openid', 'profile', 'email'])->redirect());
+Route::middleware(['web'])->get('/login', fn () => \Socialite::driver('laravelpassport')->scopes(['openid', 'profile', 'email'])->redirect())->name('login');
 Route::middleware(['web'])->get('/redirect', function () {
     if (request()->get('error')) {
         return response()->json([

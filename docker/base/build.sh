@@ -6,7 +6,7 @@ PHP_VERSION=8.1
 
 TAG=$PHP_VERSION-$(git rev-parse HEAD | head -c 7)
 
-docker login -u $DOCKER_USER -p $DOCKER_PASS
+#docker login -u $DOCKER_USER -p $DOCKER_PASS
 
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}

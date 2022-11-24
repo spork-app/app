@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeatureListsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -41,4 +41,4 @@ class CreateFeatureListsTable extends Migration
         Schema::dropIfExists('feature_lists');
         Schema::dropIfExists('feature_list_users');
     }
-}
+};

@@ -30,10 +30,8 @@ Spork.build(async ({ store, router }) => {
 
 require('@system/core/resources/app');
 
-// Shopping needs to be refactored, the current service (meijer) isn't fully supported
-// require('@system/shopping/resources/app');
-require('@system/greenhouse/resources/app');
-require('@system/food/resources/app');
+// Register spork plugins here. I haven't figured out a great way to auto-discover and also optionally disable things yet.
+// require('@spork/development/resources/app')
 
 Spork.routesFor('base', [
     Spork.authenticatedRoute('/', require('./routes/Dashboard').default),
